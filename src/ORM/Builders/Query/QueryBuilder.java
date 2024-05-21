@@ -2,6 +2,7 @@ package ORM.Builders.Query;
 
 import ORM.Utils.Formats.ParamValue;
 import ORM.Utils.Formats.UsableModel;
+
 import ORM.Utils.Query.QueryUtils;
 
 public class QueryBuilder {
@@ -49,5 +50,12 @@ public class QueryBuilder {
             columns = utils.getModelData(m)[1],
             questionMark = utils.replaceForQuestion(columns);
         return "INSERT INTO " + tbName + "(" + columns + ") VALUES(" + questionMark + ")";
+    }
+    public String getPreparedUpdateQuery(UsableModel m, ParamValue condition) {
+        String
+            whereClause = utils.cleanByType(condition.getType(), utils.getNormalCondition(condition)),
+            setValues = utils.getSetValues(m),
+            b = "UPDATE " + tbName + " SET " + setValues + whereClause;
+        return b;
     }
 }

@@ -48,6 +48,25 @@ public class QueryUtils {
         }
         return b;
     }
+    public String getNormalCondition(ParamValue condition) {
+        String 
+            t = "",
+            b = " WHERE ";
+        if(!condition.getType().isEmpty()) {
+            t = condition.getType();
+        }
+        String[] 
+            c = condition.getColumns(),
+            v = condition.getValues();
+        for(int i=0; i<c.length; ++i) {
+            if(t.equals("NOT")) {
+                b += " NOT " + c[i] + "='" + v[i] + "' AND ";
+            } else {
+                b += c[i] + "='" + v[i] + "' " + t + " ";
+            }
+        }
+        return b;
+    }
     public String replaceForQuestion(String columns) {
         String b = "";
         String[] separate = columns.split(",");
@@ -78,5 +97,16 @@ public class QueryUtils {
         returns[0] = clean(t, 1);
         returns[1] = clean(c, 1);
         return returns;
+    }
+
+    public String getSetValues(UsableModel m) {
+        String b = "";
+        String[]
+            c = getModelData(m)[1].split(","),
+            v = getModelData(m)[0].split(",");
+        for(int i=0; i<c.length; ++i) {
+            b += c[i] + "=" + v[i] + ", ";
+        }
+        return clean(b, 2);
     }
 }

@@ -14,7 +14,7 @@ class javaORM {
             v = {"alfonso", "admin"};
         ParamValue value = new ParamValue(c, v, "or");
         TestModel t = new TestModel("alfonso", "alf@gmail.com", "admin");
-        String a = b.getPreparedInserQuery(t);
+        String a = b.getPreparedUpdateQuery(t, value);
         System.out.println(a);
     }
 
