@@ -1,7 +1,7 @@
 package ORM.Utils.Formats;
 
 public class DbConfig {
-    public final static String DRIVER = "com.mysql.cj.jdbc.Driver";
+    public final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private String host;
     private String user;
     private String password;
