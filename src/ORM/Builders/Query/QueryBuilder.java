@@ -19,15 +19,7 @@ public class QueryBuilder {
         if(!condition.getType().isEmpty()) {
             t = condition.getType();
         }
-        b += " WHERE ";
-        String[] c = condition.getColumns();
-        for(int i=0; i<c.length; ++i) {
-            if(t.equals("NOT")) {
-                b+=  " NOT " + c[i] + "=? AND ";
-            } else {
-                b+= c[i] + "=? " + t + " ";
-            }
-        }
+        b += utils.getPreparedCondition(condition);
         return utils.cleanByType(t, b);
     }
     public String getPreparedFind(ParamValue condition, String columns) {
@@ -37,15 +29,8 @@ public class QueryBuilder {
         if(!condition.getType().isEmpty()) {
             t = condition.getType();
         }
-        b += " WHERE ";
-        String[] c = condition.getColumns();
-        for(int i=0; i<c.length; ++i) {
-            if(t.equals("NOT")) {
-                b += " NOT " + c[i] + "=? AND ";
-            } else {
-                b += c[i] + "=? " + t + " ";
-            }
-        }
+        b += utils.getPreparedCondition(condition);
+        
         return utils.cleanByType(t, b);
     }
 }

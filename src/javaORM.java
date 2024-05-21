@@ -12,11 +12,11 @@ class javaORM {
             c = {"nombre", "rol"},
             v = {"alfonso", "admin"};
         ParamValue value = new ParamValue(c, v, "or");
-        String a = b.getPreparedFind(value, "nombre, email, password");
+        String a = b.getPreparedSelect(value);
         System.out.println(a);
     }
 
-    private static Connection initDB() {
+    public static Connection initDB() {
         DbConfig c = new DbConfig("consulta", "localhost", 3306, "test_user", "5x5W12");
         Connector cursor = new Connector(c);
         return cursor.mysqlConnection();
