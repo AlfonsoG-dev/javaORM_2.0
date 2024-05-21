@@ -1,11 +1,19 @@
 import java.sql.Connection;
 
+import ORM.Builders.Query.QueryBuilder;
 import ORM.Database.Connector;
 import ORM.Utils.Formats.DbConfig;
+import ORM.Utils.Formats.ParamValue;
 
 class javaORM {
     public static void main(String[] args) {
-        initDB();
+        QueryBuilder b = new QueryBuilder("user");
+        String[] 
+            c = {"nombre", "rol"},
+            v = {"alfonso", "admin"};
+        ParamValue value = new ParamValue(c, v, "or");
+        String a = b.getPreparedFind(value, "nombre, email, password");
+        System.out.println(a);
     }
 
     private static Connection initDB() {
