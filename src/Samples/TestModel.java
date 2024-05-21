@@ -61,7 +61,10 @@ public class TestModel implements UsableModel {
     // UsableModel methods
     @Override
     public String getInstanceData() {
-        String b = "id_pk: " + getId_pk() + "\n";
+        String b =""; 
+        if(getId_pk() > 0) {
+            b += "id_pk: " + getId_pk() + "\n";
+        }
         if(!getName().isEmpty()) {
             b += "name: " + getName() + "\n";
         } 

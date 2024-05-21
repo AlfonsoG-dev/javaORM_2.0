@@ -4,6 +4,7 @@ import ORM.Builders.Query.QueryBuilder;
 import ORM.DbConnection.Connector;
 import ORM.Utils.Formats.DbConfig;
 import ORM.Utils.Formats.ParamValue;
+import Samples.TestModel;
 
 class javaORM {
     public static void main(String[] args) {
@@ -12,7 +13,8 @@ class javaORM {
             c = {"nombre", "rol"},
             v = {"alfonso", "admin"};
         ParamValue value = new ParamValue(c, v, "or");
-        String a = b.getPreparedSelect(value);
+        TestModel t = new TestModel("alfonso", "alf@gmail.com", "admin");
+        String a = b.getPreparedInserQuery(t);
         System.out.println(a);
     }
 
