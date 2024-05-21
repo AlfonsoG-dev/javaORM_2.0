@@ -1,6 +1,7 @@
 package ORM.Utils.Query;
 
 import ORM.Utils.Formats.ParamValue;
+import ORM.Utils.Formats.UsableModel;
 
 public class QueryUtils {
     public String cleanByType(String type, String query) {
@@ -34,5 +35,10 @@ public class QueryUtils {
             }
         }
         return b;
+    }
+    public String[] getModelData(UsableModel m) {
+        String[] d = new String[2];
+        // String properties = m.getInstanceData();
+        return d;
     }
 }

@@ -1,6 +1,7 @@
 package ORM.Builders.Query;
 
 import ORM.Utils.Formats.ParamValue;
+import ORM.Utils.Formats.UsableModel;
 import ORM.Utils.Query.QueryUtils;
 
 public class QueryBuilder {
@@ -32,5 +33,13 @@ public class QueryBuilder {
         b += utils.getPreparedCondition(condition);
         
         return utils.cleanByType(t, b);
+    }
+    /**
+     * INTSERT INTO tbName(column1, column2) values ('value1', 'value2');
+     * INSERT INTO tbName values('value1', 'value2');
+     */
+    public String getPreparedInser(UsableModel m) {
+        String b = "";
+        return b;
     }
 }

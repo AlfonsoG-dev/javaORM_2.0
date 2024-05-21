@@ -1,7 +1,7 @@
 import java.sql.Connection;
 
 import ORM.Builders.Query.QueryBuilder;
-import ORM.Database.Connector;
+import ORM.DbConnection.Connector;
 import ORM.Utils.Formats.DbConfig;
 import ORM.Utils.Formats.ParamValue;
 
