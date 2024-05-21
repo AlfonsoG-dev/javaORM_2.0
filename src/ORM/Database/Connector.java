@@ -14,7 +14,11 @@ public class Connector {
         Connection c = null;
         try {
             Class.forName(config.DRIVER);
-            c = DriverManager.getConnection(config.getURL(), config.getUser(), config.getPassword());
+            c = DriverManager.getConnection(
+                    config.getURL(),
+                    config.getUser(),
+                    config.getPassword()
+            );
         } catch(Exception e) {
             e.printStackTrace();
         }
