@@ -27,7 +27,7 @@ public class ModelMetadata {
      * @throws ClassNotFoundException: error while trying to get class for name
      * @return list of class fields.
      */
-    private Field[] getModelFields() throws ClassNotFoundException {
+    private Field[] getFields() throws ClassNotFoundException {
         Class<?> myClass = Class.forName(modelName);
         Field[] myFields = myClass.getDeclaredFields();
         return myFields;
@@ -36,10 +36,10 @@ public class ModelMetadata {
      * model columns are the attributes names
      * @return columns or attributes names
      */
-    private String getModelColumns() {
+    private String getColumns() {
         StringBuffer rest = new StringBuffer();
         try {
-            Field[] myFields = getModelFields();
+            Field[] myFields = getFields();
             if(myFields.length > 0) {
                 for(Field f: myFields) {
                     rest.append(f.getName() + ", ");
@@ -53,10 +53,10 @@ public class ModelMetadata {
     /**
      * list of class annotations.
      */
-    private ArrayList<Annotation[]> getModelAnnotations() {
+    private ArrayList<Annotation[]> getAnnotations() {
         ArrayList<Annotation[]> rest = new ArrayList<>();
         try {
-            Field[] myFields = getModelFields();
+            Field[] myFields = getFields();
             if(myFields.length > 0) {
                 for(Field f: myFields) {
                     if(f.getAnnotations().length > 0) {
@@ -71,7 +71,7 @@ public class ModelMetadata {
     }
     private String getAnnotationConstraint() {
         StringBuffer constraint = new StringBuffer();
-        ArrayList<Annotation[]> misAnnotations = getModelAnnotations();
+        ArrayList<Annotation[]> misAnnotations = getAnnotations();
         for(Annotation[] m: misAnnotations) {
             constraint.append(m[0] + " and ");
         }
@@ -80,7 +80,7 @@ public class ModelMetadata {
     /**
      * constraint part of model annotations
      */
-    private String getModelColumConstraint() {
+    private String getColumConstraint() {
         try {
             String[] myConstraint = getAnnotationConstraint().split(" and ");
             StringBuffer data = new StringBuffer();
@@ -105,7 +105,7 @@ public class ModelMetadata {
     /**
      * type part of model annotations
      */
-    private String getModelColumnType() {
+    private String getColumnType() {
         try {
             String[] myConstraint = getAnnotationConstraint().split(" and ");
             StringBuffer data = new StringBuffer();
@@ -135,12 +135,12 @@ public class ModelMetadata {
     /**
      * model column: type format.
      */
-    public String getModelProperties() {
+    public String getProperties() {
         StringBuffer build = new StringBuffer();
         String[] 
-            columns    = getModelColumns().split(", "),
-            types      = getModelColumnType().split(", "),
-            constraint = getModelColumConstraint().split(", ");
+            columns    = getColumns().split(", "),
+            types      = getColumnType().split(", "),
+            constraint = getColumConstraint().split(", ");
         for(int i=0; i<columns.length; ++i) {
             if(constraint[i] != "") {
                 build.append(
