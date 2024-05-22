@@ -16,12 +16,4 @@ public class TestModel implements UsableMethods {
     private String rol;
 
     public TestModel(String name, String email, String rol) { }
-
-    @Override
-    public String getInstanceData() {
-        throw new UnsupportedOperationException(
-                "[ ERROR ]: this class is only for declaring database info"
-        );
-    }
-
 }

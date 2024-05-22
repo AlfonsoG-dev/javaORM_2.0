@@ -1,7 +1,5 @@
 package Samples;
 
-import ORM.Utils.Model.ModelMetadata;
-
 public class TestODM extends TestModel {
     public String name;
     public String email;
@@ -25,11 +23,5 @@ public class TestODM extends TestModel {
 
     public String getRol() {
         return rol;
-    }
-
-    @Override
-    public String getInstanceData() {
-        ModelMetadata metadata = new ModelMetadata(TestODM.class);
-        return metadata.getInstanceData(this);
     }
 }

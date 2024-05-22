@@ -15,19 +15,12 @@ public class TestModel implements UsableMethods {
         this.description = description;
         this.userName = userName;
     }
-
-    @Override
-    public String getInstanceData() {
-        throw new UnsupportedOperationException(
-                "[ ERROR ]: this class is only for declaring database info"
-        );
-    }
 }
 ```
 - Its necessary to use the `UsableMethods` because it has the methods to initialize the database and table data.
-- Also it can carry the instance data.
+- And also it carries the instance data.
 
->_ For the `TestModel` declaration its only nedded the database data no the instance data.
+>_ For the `TestODM` declaration its only nedded the database data no the instance data.
 - In order to get the instance data you need to create another class call `TestODM` that will supply the functionality.
 
 >_ The following is an instance class or model.
@@ -42,13 +35,32 @@ public class TestODM extends TestModel {
         this.description = description;
         this.userName = userName;
     }
+}
+```
+
+- This is the `UsableMethods` interface declaration
+```java
+public interface UsableMethods {
+
     /**
-    * this method is replacing the TestModel
+    * This methods use java.reflect to invoke all the methods that starts with getMethodName.
+    * The model also will have to declare the attributes with public scope.
+    * All the attributes that are declare with private scope will be ignored.
+    * The ODM class will be use for this.
     */
-    @Override
-    public String getInstanceData() {
-        ModelMetadata metadata = new ModelMetadata(TestODM.class);
+    public default String getInstanceData() {
+        ModelMetadata metadata = new ModelMetadata(this.getClass());
         return metadata.getInstanceData(this);
+    }
+
+    /**
+    * this method use java.reflect to get the Annotation data of all the attributes.
+    * The class that is use as model only declare private fields and the public field is a constructor used for the ODM class.
+    * the model class will be used for this.
+    */
+    public default String initModel() {
+        ModelMetadata metadata = new ModelMetadata(this.getClass());
+        return metadata.getProperties();
     }
 }
 ```
