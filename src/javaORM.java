@@ -1,21 +1,15 @@
 import java.sql.Connection;
 
-import ORM.Builders.Query.QueryBuilder;
 import ORM.DbConnection.Connector;
+
 import ORM.Utils.Formats.DbConfig;
-import ORM.Utils.Formats.ParamValue;
+
 import Samples.TestModel;
 
 class javaORM {
     public static void main(String[] args) {
-        QueryBuilder b = new QueryBuilder("user");
-        String[] 
-            c = {"nombre", "rol"},
-            v = {"alfonso", "admin"};
-        ParamValue value = new ParamValue(c, v, "or");
         TestModel t = new TestModel("alfonso", "alf@gmail.com", "admin");
-        String a = b.getPreparedUpdateQuery(t, value);
-        System.out.println(a);
+        System.out.println(t.instanceData(t));
     }
 
     public static Connection initDB() {

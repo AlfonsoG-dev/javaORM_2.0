@@ -1,34 +1,38 @@
 package ORM.Utils.Model;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class ModelMetadata {
     /**
      * model or table name
      */
-    private String modelName;
+    private Class<?> myClass;
     /**
      * {@link java.lang.reflect.Constructor}
      * this one is created using model name as {@link String}
      */
     public ModelMetadata(String nModelName) {
-        modelName = nModelName;
+        try {
+            myClass = Class.forName(nModelName);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
     /**
      * {@link java.lang.reflect.Constructor}
      * this one is created using class reflect
      */
     public ModelMetadata(Class<?> model) {
-        modelName = model.getName();
+        myClass = model;
     }
     /**
      * list declare class fields.
      * @throws ClassNotFoundException: error while trying to get class for name
      * @return list of class fields.
      */
-    private Field[] getFields() throws ClassNotFoundException {
-        Class<?> myClass = Class.forName(modelName);
+    private Field[] getFields() {
         Field[] myFields = myClass.getDeclaredFields();
         return myFields;
     }
@@ -38,15 +42,11 @@ public class ModelMetadata {
      */
     private String getColumns() {
         StringBuffer rest = new StringBuffer();
-        try {
-            Field[] myFields = getFields();
-            if(myFields.length > 0) {
-                for(Field f: myFields) {
-                    rest.append(f.getName() + ", ");
-                }
+        Field[] myFields = getFields();
+        if(myFields.length > 0) {
+            for(Field f: myFields) {
+                rest.append(f.getName() + ", ");
             }
-        } catch(ClassNotFoundException e) {
-            System.err.println(e);
         }
         return rest.substring(0, rest.length()-2);
     }
@@ -55,17 +55,13 @@ public class ModelMetadata {
      */
     private ArrayList<Annotation[]> getAnnotations() {
         ArrayList<Annotation[]> rest = new ArrayList<>();
-        try {
-            Field[] myFields = getFields();
-            if(myFields.length > 0) {
-                for(Field f: myFields) {
-                    if(f.getAnnotations().length > 0) {
-                        rest.add(f.getAnnotations());
-                    }
+        Field[] myFields = getFields();
+        if(myFields.length > 0) {
+            for(Field f: myFields) {
+                if(f.getAnnotations().length > 0) {
+                    rest.add(f.getAnnotations());
                 }
             }
-        } catch(ClassNotFoundException e) {
-            System.err.println(e);
         }
         return rest;
     }
@@ -128,9 +124,48 @@ public class ModelMetadata {
                 cleanData = restData.substring(0, restData.length()-2);
             return cleanData;
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
             return "";
         }
+    }
+    private<T> Method validateValue(String methodName, T instance) {
+        Method m = null;
+        try {
+            Method t = myClass.getMethod(methodName);
+            if(t.invoke(instance) != null) {
+                m = t;
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return m;
+    }
+    private boolean validateName(String methodName) {
+        boolean isValid = false;
+        Method[] methods = myClass.getMethods();
+        for(Method m: methods) {
+            if(m.getName().equals(methodName)) {
+                isValid = true;
+            }
+        }
+        return isValid;
+    }
+    public<T> String getInstanceData(T instance) {
+        String b = "";
+        Field[] fields = getFields();
+        try {
+            for(Field f: fields) {
+                String fieldName = f.getName();
+                String methodName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+                Method m = validateValue(methodName, instance);
+                if(validateName(methodName) && m != null) {
+                    b += fieldName + ": " + m.invoke(instance) + "\n";
+                }
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return b;
     }
     /**
      * model column: type format.

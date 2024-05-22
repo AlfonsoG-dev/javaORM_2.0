@@ -1,6 +1,7 @@
 package Samples;
 
 import ORM.Utils.Formats.UsableModel;
+import ORM.Utils.Model.ModelMetadata;
 import ORM.Utils.Model.TableData;
 
 public class TestModel implements UsableModel {
@@ -75,5 +76,9 @@ public class TestModel implements UsableModel {
             b += "rol: " + getRol() + "\n";
         }
         return b;
+    }
+    public String instanceData(TestModel m) {
+        ModelMetadata metadata = new ModelMetadata(TestModel.class);
+        return metadata.getInstanceData(m);
     }
 }
