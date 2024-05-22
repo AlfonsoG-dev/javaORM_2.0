@@ -1,15 +1,14 @@
 package Samples;
 
-import ORM.Utils.Formats.UsableMethods;
 import ORM.Utils.Model.ModelMetadata;
 
-public class TestODM implements UsableMethods {
+public class TestODM extends TestModel {
     public String name;
     public String email;
     public String rol;
-
     
     public TestODM(String name, String email, String rol) {
+        super(name, email, rol);
         this.name = name;
         this.email = email;
         this.rol = rol;

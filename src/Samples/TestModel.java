@@ -15,6 +15,8 @@ public class TestModel implements UsableMethods {
     @TableData(constraint = "not null", type = "varchar(100)")
     private String rol;
 
+    public TestModel(String name, String email, String rol) { }
+
     @Override
     public String getInstanceData() {
         throw new UnsupportedOperationException(
