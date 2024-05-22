@@ -1,15 +1,17 @@
 import java.sql.Connection;
 
+import ORM.Builders.Query.QueryBuilder;
 import ORM.DbConnection.Connector;
 
 import ORM.Utils.Formats.DbConfig;
 
-import Samples.TestModel;
+import Samples.TestODM;
 
 class javaORM {
     public static void main(String[] args) {
-        TestModel t = new TestModel("alfonso", "alf@gmail.com", "admin");
-        System.out.println(t.instanceData(t));
+        TestODM t = new TestODM("alfonso", "alf@gmail.com", "admin");
+        QueryBuilder builder = new QueryBuilder("contrasenias");
+        System.out.println(builder.getInserQuery(t));
     }
 
     public static Connection initDB() {
