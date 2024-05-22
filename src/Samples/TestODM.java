@@ -1,9 +1,9 @@
 package Samples;
 
-import ORM.Utils.Formats.UsableModel;
+import ORM.Utils.Formats.UsableMethods;
 import ORM.Utils.Model.ModelMetadata;
 
-public class TestODM implements UsableModel {
+public class TestODM implements UsableMethods {
     public String name;
     public String email;
     public String rol;

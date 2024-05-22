@@ -1,19 +1,15 @@
-package Samples;
+# Another java ORM(Object Relational Mapping) application
+- In this iteration i want to use java.reflect to get the instance data of a model.
 
-import ORM.Utils.Formats.UsableMethods;
-import ORM.Utils.Model.TableData;
-
+>_ The following is a database model.
+```java
 public class TestModel implements UsableMethods {
-
-    // members
     @TableData(constraint = "not null unique primary key auto_increment", type = "int")
     private int id_pk;
-    @TableData(constraint = "not null", type = "varchar(100)")
-    private String name;
+    @TableData(constraint = "not null", type = "text")
+    private String description;
     @TableData(constraint = "not null unique", type = "varchar(100)")
-    private String email;
-    @TableData(constraint = "not null", type = "varchar(100)")
-    private String rol;
+    private String userName;
 
     @Override
     public String getInstanceData() {
@@ -21,5 +17,6 @@ public class TestModel implements UsableMethods {
                 "[ ERROR ]: this class is only for declaring database info"
         );
     }
-
 }
+```
+- Its necessary to use the `UsableMethods`

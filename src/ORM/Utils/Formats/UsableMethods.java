@@ -2,7 +2,7 @@ package ORM.Utils.Formats;
 
 import ORM.Utils.Model.ModelMetadata;
 
-public interface UsableModel {
+public interface UsableMethods {
 
     public String getInstanceData();
 

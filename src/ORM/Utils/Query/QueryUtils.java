@@ -1,7 +1,7 @@
 package ORM.Utils.Query;
 
 import ORM.Utils.Formats.ParamValue;
-import ORM.Utils.Formats.UsableModel;
+import ORM.Utils.Formats.UsableMethods;
 import ORM.Utils.Model.ModelUtils;
 
 public class QueryUtils {
@@ -77,7 +77,7 @@ public class QueryUtils {
         }
         return clean(b, 1);
     }
-    public String[] getModelData(UsableModel m) {
+    public String[] getModelData(UsableMethods m) {
         String[]
             returns = new String[2],
             types = modelUtils.getTypes(m.getInstanceData(), true).split(","),
@@ -99,7 +99,7 @@ public class QueryUtils {
         return returns;
     }
 
-    public String getSetValues(UsableModel m) {
+    public String getSetValues(UsableMethods m) {
         String b = "";
         String[]
             c = getModelData(m)[1].split(","),
