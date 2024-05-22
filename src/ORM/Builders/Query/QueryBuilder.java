@@ -58,4 +58,9 @@ public class QueryBuilder {
             b = "UPDATE " + tbName + " SET " + setValues + whereClause;
         return b;
     }
+
+    public String getPreparedDeleteQuery(ParamValue condition) {
+        String b = utils.getPreparedCondition(condition);
+        return "DELETE FROM " + tbName + b;
+    }
 }
