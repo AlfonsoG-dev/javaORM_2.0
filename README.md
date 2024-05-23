@@ -1,5 +1,15 @@
 # Another java ORM(Object Relational Mapping) application
+
 - In this iteration i want to use java.reflect to get the instance data of a model.
+
+# Features 
+
+- [x] Use prepared statements.
+- [x] Use Annotation base model for migrations. 
+- [x] Dinamyc class info loading.
+- [x] Query generation.
+
+# Additional information.
 
 >_ The following is a database model.
 ```java
@@ -64,3 +74,9 @@ public interface UsableMethods {
     }
 }
 ```
+
+# Disclaimer
+
+- This project is for educational purposes.
+- Security issues are not taken into account.
+- It's not intended to create an functional ORM.
