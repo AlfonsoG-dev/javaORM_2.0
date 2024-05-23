@@ -1,15 +1,20 @@
 package ORM.Utils.Query;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.Connection;
+
+
+import ORM.Utils.Model.ModelUtils;
 
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 public class MigrationUtils {
     private Connection cursor;
+    private ModelUtils modelUtils;
     public MigrationUtils(Connection cursor) {
         this.cursor = cursor;
     }
@@ -88,19 +93,65 @@ public class MigrationUtils {
         System.out.println(data.get("rows"));
         return data;
     }
-    public void getColumns() {
+    public HashMap<String, String> getCompareColumnNames(String table, String modelData) {
+        HashMap<String, String> data = new HashMap<>();
+        List<String>
+            modelColumns = Arrays.asList(modelUtils.getColumns(modelData, true)),
+            tableColumns = getTableData(table).get("columns");
+        if(modelColumns.size() == tableColumns.size()) {
+            if(tableColumns.size() < modelColumns.size()) {
+                String added = "";
+                for(int i=0; i<modelColumns.size(); ++i) {
+                    if(!tableColumns.contains(modelColumns.get(i))) {
+                        added += modelColumns.get(i) + ":" + tableColumns.get(i) + ",";
+                    }
+                }
+                data.put(
+                        "add", added.substring(0, added.length()-1)
+                );
+            }
+            if(!tableColumns.containsAll(modelColumns)) {
+                String renamed = "";
+                for(int i=0; i<tableColumns.size(); ++i) {
+                    if(!tableColumns.get(i).equals(modelColumns.get(i))) {
+                        renamed += modelColumns.get(i) + ":" + tableColumns.get(i) + ",";
+                    }
+                }
+                data.put(
+                        "rename", renamed.substring(0, renamed.length()-1)
+                );
+            }
+            if(tableColumns.size() > modelColumns.size()) {
+                String deleted = "";
+                for(int i=0; i<tableColumns.size(); ++i) {
+                    if(!modelColumns.contains(tableColumns.get(i))) {
+                        deleted += tableColumns.get(i) + ":" + i + ",";
+                    }
+                }
+                data.put(
+                        "delete", deleted.substring(0, deleted.length()-1)
+                );
+            }
+        }
+        return data;
     }
-    /**
-     * rows are the types or values
-     */
-    public void getRows() {
-    }
-    public void getConstraint() {
-    }
-    public void getCompareColumnNames() {
-    }
-    public void getCompareTypes() {
-    }
-    public void getCompareConstraint() {
+    public HashMap<String, String> getCompareTypes(String table, String modelData) {
+        HashMap<String, String> data = new HashMap<>();
+        List<String>
+            modelTypes = Arrays.asList(modelUtils.getTypes(modelData, true)),
+            tableTypes = getTableData(table).get("rows");
+        if(modelTypes.size() == tableTypes.size()) {
+            String modify = "";
+            for(int i=0; i<modelTypes.size(); ++i) {
+                String cleanModelTypes = modelTypes.get(i).replace("'", "");
+                if(!tableTypes.contains(cleanModelTypes)) {
+                    modify += cleanModelTypes + ":" + i + ",";
+                }
+            }
+            data.put(
+                    "modify", modify.substring(0, modify.length()-1)
+            );
+        }
+        return data;
     }
 }
