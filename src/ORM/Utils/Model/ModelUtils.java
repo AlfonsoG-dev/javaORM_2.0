@@ -1,6 +1,9 @@
 package ORM.Utils.Model;
 
 import java.util.List;
+
+import ORM.Utils.Formats.UsableMethods;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 public class ModelUtils {
@@ -75,5 +78,15 @@ public class ModelUtils {
             keys.put("fk", fks);
         }
         return keys;
+    }
+    public int getColumnIndex(String modelData, String columnName, boolean includeKeys) {
+        int index = 0;
+        String[] columns = getColumns(modelData, includeKeys).split(",");
+        for(int i=0; i<columns.length; ++i) {
+            if(columns[i].equals(columnName)) {
+                index = i;
+            }
+        }
+        return index;
     }
 }

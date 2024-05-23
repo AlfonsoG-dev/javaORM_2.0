@@ -1,16 +1,18 @@
 import java.sql.Connection;
 
+import ORM.Builders.Migration.MigrationBuilder;
 import ORM.DbConnection.Connector;
 
 import ORM.Utils.Formats.DbConfig;
-import ORM.Utils.Query.MigrationUtils;
+import Samples.Models.TestModel;
 
 
 class javaORM {
     public static void main(String[] args) {
         Connection cursor = initDB();
-        MigrationUtils utils = new MigrationUtils(cursor);
-        utils.getTableData("users");
+        MigrationBuilder builder = new MigrationBuilder("users", cursor);
+        TestModel model = new TestModel();
+        System.out.println(builder.getAddColumnQuery(model.initModel(), args, args, true));
     }
 
     public static Connection initDB() {

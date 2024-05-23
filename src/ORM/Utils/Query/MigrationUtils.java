@@ -17,6 +17,7 @@ public class MigrationUtils {
     private ModelUtils modelUtils;
     public MigrationUtils(Connection cursor) {
         this.cursor = cursor;
+        modelUtils = new ModelUtils();
     }
     protected ResultSet getShowCreateTable(String table) {
         Statement stm = null;
@@ -90,55 +91,52 @@ public class MigrationUtils {
         }
         data.put("columns", columns);
         data.put("rows", rows);
-        System.out.println(data.get("rows"));
         return data;
     }
     public HashMap<String, String> getCompareColumnNames(String table, String modelData) {
         HashMap<String, String> data = new HashMap<>();
         List<String>
-            modelColumns = Arrays.asList(modelUtils.getColumns(modelData, true)),
+            modelColumns = Arrays.asList(modelUtils.getColumns(modelData, true).split(",")),
             tableColumns = getTableData(table).get("columns");
-        if(modelColumns.size() == tableColumns.size()) {
-            if(tableColumns.size() < modelColumns.size()) {
-                String added = "";
-                for(int i=0; i<modelColumns.size(); ++i) {
-                    if(!tableColumns.contains(modelColumns.get(i))) {
-                        added += modelColumns.get(i) + ":" + tableColumns.get(i) + ",";
-                    }
+        if(tableColumns.size() == modelColumns.size()) {
+            String renamed = "";
+            for(int i=0; i<tableColumns.size(); ++i) {
+                if(!tableColumns.get(i).equals(modelColumns.get(i))) {
+                    renamed += modelColumns.get(i) + ":" + tableColumns.get(i) + ",";
                 }
-                data.put(
-                        "add", added.substring(0, added.length()-1)
-                );
             }
-            if(!tableColumns.containsAll(modelColumns)) {
-                String renamed = "";
-                for(int i=0; i<tableColumns.size(); ++i) {
-                    if(!tableColumns.get(i).equals(modelColumns.get(i))) {
-                        renamed += modelColumns.get(i) + ":" + tableColumns.get(i) + ",";
-                    }
+            data.put(
+                    "rename", renamed.substring(0, renamed.length()-1)
+            );
+        }
+        if(modelColumns.size() > tableColumns.size()) {
+            String added = "";
+            for(int i=0; i<modelColumns.size(); ++i) {
+                if(!tableColumns.contains(modelColumns.get(i))) {
+                    added += modelColumns.get(i) + ",";
                 }
-                data.put(
-                        "rename", renamed.substring(0, renamed.length()-1)
-                );
             }
-            if(tableColumns.size() > modelColumns.size()) {
-                String deleted = "";
-                for(int i=0; i<tableColumns.size(); ++i) {
-                    if(!modelColumns.contains(tableColumns.get(i))) {
-                        deleted += tableColumns.get(i) + ":" + i + ",";
-                    }
+            data.put(
+                    "add", added.substring(0, added.length()-1)
+            );
+        }
+        if(tableColumns.size() > modelColumns.size()) {
+            String deleted = "";
+            for(int i=0; i<tableColumns.size(); ++i) {
+                if(!modelColumns.contains(tableColumns.get(i))) {
+                    deleted += tableColumns.get(i) + ":" + i + ",";
                 }
-                data.put(
-                        "delete", deleted.substring(0, deleted.length()-1)
-                );
             }
+            data.put(
+                    "delete", deleted.substring(0, deleted.length()-1)
+            );
         }
         return data;
     }
     public HashMap<String, String> getCompareTypes(String table, String modelData) {
         HashMap<String, String> data = new HashMap<>();
         List<String>
-            modelTypes = Arrays.asList(modelUtils.getTypes(modelData, true)),
+            modelTypes = Arrays.asList(modelUtils.getTypes(modelData, true).split(",")),
             tableTypes = getTableData(table).get("rows");
         if(modelTypes.size() == tableTypes.size()) {
             String modify = "";

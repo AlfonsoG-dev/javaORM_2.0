@@ -81,7 +81,7 @@ public class ModelMetadata {
             String[] myConstraint = getAnnotationConstraint().split(" and ");
             StringBuffer data = new StringBuffer();
             for(String c: myConstraint) {
-                String[] f = c.split(".miConstraint");
+                String[] f = c.split(".constraint");
                 for(String i: f) {
                     String[] ci = i.split(", ");
                     if(ci[0].startsWith("\"") || ci[0].endsWith("\"")) {
@@ -106,11 +106,11 @@ public class ModelMetadata {
             String[] myConstraint = getAnnotationConstraint().split(" and ");
             StringBuffer data = new StringBuffer();
             for(String c: myConstraint) {
-                String[] f = c.split(".miConstraint");
+                String[] f = c.split(".constraint");
                 for(String i: f) {
                     String[] ci = i.split(", ");
                     for(String t: ci) {
-                        String[] mt = t.split("miType=");
+                        String[] mt = t.split("type=");
                         if(mt.length == 2) {
                             if(mt[1].startsWith("\"") || mt[1].endsWith(")")) {
                                 data.append(mt[1]);
@@ -121,7 +121,10 @@ public class ModelMetadata {
             }
             String 
                 restData  = data.toString().replace("\")", "\", "),
+                cleanData = "";
+            if((restData.length()-2) > 0) {
                 cleanData = restData.substring(0, restData.length()-2);
+            }
             return cleanData;
         } catch(Exception e) {
             e.printStackTrace();
