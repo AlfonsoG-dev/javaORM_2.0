@@ -90,16 +90,15 @@ public class MigrationBuilder {
             for(String d: data) {
                 String
                     afterColumn = "",
-                    addType = "",
-                    addColumn = d.split(":")[0];
-                int index = modelUtils.getColumnIndex(primaryM, addColumn, includeKeys);
+                    addType = "";
+                int index = modelUtils.getColumnIndex(primaryM, d, includeKeys);
                 addType = index < modelTypes.length ? modelTypes[index].replace("'", "") : null;
                 afterColumn = (index-1) < modelColumn.length ? modelColumn[index-1] : null;
                 if(addType != null && afterColumn != null) {
                     if(addType.contains(".")) {
                         addType = addType.split("\\.")[0];
                     }
-                    b+= addColumn + " " + addType + " AFTER " + afterColumn + ", ";
+                    b+= d + " " + addType + " AFTER " + afterColumn + ", ";
                 }
                 if(includeKeys) {
                     // TODO: create pk | fk constraint
@@ -116,9 +115,24 @@ public class MigrationBuilder {
         }
         return getAlterTableQuery(clean);
     }
-    public String getRemoveColumnQuery() {
-        String b = "";
-        return b;
+    public String getRemoveColumnQuery(String model) {
+        String
+            toRemove = migrationUtils.getCompareColumnNames(tableName, model).get("remove"),
+            b = "DROP COLUMN ";
+        if(toRemove != null) {
+            String[] columns = toRemove.split(",");
+            for(String c: columns) {
+                if(c.contains("pk") || c.contains("fk")) {
+                    // TODO: create pk | fk drop constraint
+                } else {
+                    b+= c + ", ";
+                }
+            }
+        }
+        if(b.length()-2 > 0) {
+            b = b.substring(0, b.length()-2);
+        }
+        return getAlterTableQuery(b);
     }
     public String getModifyTypeQuery() {
         String b = "";
