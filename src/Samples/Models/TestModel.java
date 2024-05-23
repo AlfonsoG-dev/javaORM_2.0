@@ -1,4 +1,4 @@
-package Samples;
+package Samples.Models;
 
 import ORM.Utils.Formats.UsableMethods;
 import ORM.Utils.Model.TableData;

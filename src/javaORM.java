@@ -5,7 +5,7 @@ import ORM.DbConnection.Connector;
 
 import ORM.Utils.Formats.DbConfig;
 
-import Samples.TestODM;
+import Samples.Models.TestODM;
 
 class javaORM {
     public static void main(String[] args) {

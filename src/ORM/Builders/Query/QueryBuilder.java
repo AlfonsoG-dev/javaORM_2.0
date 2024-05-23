@@ -2,18 +2,15 @@ package ORM.Builders.Query;
 
 import ORM.Utils.Formats.ParamValue;
 import ORM.Utils.Formats.UsableMethods;
-import ORM.Utils.Model.ModelUtils;
 import ORM.Utils.Query.QueryUtils;
 
 public class QueryBuilder {
     private String tbName;
     private QueryUtils queryUtils;
-    private ModelUtils modelUtils;
 
     public QueryBuilder(String tbName) {
         this.tbName = tbName;
         queryUtils = new QueryUtils();
-        modelUtils= new ModelUtils();
     }
 
     public String getPreparedSelectQuery(ParamValue condition) {

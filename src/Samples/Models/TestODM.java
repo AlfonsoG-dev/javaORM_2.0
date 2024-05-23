@@ -1,4 +1,4 @@
-package Samples;
+package Samples.Models;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
