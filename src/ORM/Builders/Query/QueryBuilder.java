@@ -36,16 +36,16 @@ public class QueryBuilder {
         return utils.cleanByType(t, b);
     }
     /**
-     * INTSERT INTO tbName(column1, column2) values ('value1', 'value2');
+     * INSERT INTO tbName(column1, column2) values ('value1', 'value2');
      * INSERT INTO tbName values('value1', 'value2');
      */
-    public String getInserQuery(UsableMethods m) {
+    public String getInsertQuery(UsableMethods m) {
         String 
             types = utils.getModelData(m)[0],
-            colums = utils.getModelData(m)[1];
-        return "INSERT INTO " + tbName + "(" + colums + ") VALUES(" + types + ")";
+            columns = utils.getModelData(m)[1];
+        return "INSERT INTO " + tbName + "(" + columns + ") VALUES(" + types + ")";
     }
-    public String getPreparedInserQuery(UsableMethods m) {
+    public String getPreparedInsertQuery(UsableMethods m) {
         String
             columns = utils.getModelData(m)[1],
             questionMark = utils.replaceForQuestion(columns);

@@ -12,7 +12,7 @@ class javaORM {
         TestODM t = new TestODM("alfonso", "alf@gmail.com", "admin");
         t.setCreate_at();
         QueryBuilder builder = new QueryBuilder("contrasenias");
-        System.out.println(builder.getInserQuery(t));
+        System.out.println(builder.getInsertQuery(t));
     }
 
     public static Connection initDB() {
