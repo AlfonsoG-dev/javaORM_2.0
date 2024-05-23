@@ -2,26 +2,28 @@ package ORM.Builders.Query;
 
 import ORM.Utils.Formats.ParamValue;
 import ORM.Utils.Formats.UsableMethods;
-
+import ORM.Utils.Model.ModelUtils;
 import ORM.Utils.Query.QueryUtils;
 
 public class QueryBuilder {
     private String tbName;
-    private QueryUtils utils;
+    private QueryUtils queryUtils;
+    private ModelUtils modelUtils;
 
     public QueryBuilder(String tbName) {
         this.tbName = tbName;
-        utils = new QueryUtils();
+        queryUtils = new QueryUtils();
+        modelUtils= new ModelUtils();
     }
 
     public String getPreparedSelectQuery(ParamValue condition) {
         String b = "SELECT * FROM " + tbName;
-        b += utils.getPreparedCondition(condition);
+        b += queryUtils.getPreparedCondition(condition);
         return b;
     }
     public String getPreparedFindQuery(ParamValue condition, String columns) {
         String b = "SELECT " + columns + " FROM " + tbName;
-        b += utils.getPreparedCondition(condition);
+        b += queryUtils.getPreparedCondition(condition);
         return b;
     }
     /**
@@ -30,14 +32,14 @@ public class QueryBuilder {
      */
     public String getInsertQuery(UsableMethods m) {
         String 
-            types = utils.getModelData(m)[0],
-            columns = utils.getModelData(m)[1];
+            types = queryUtils.getModelData(m)[0],
+            columns = queryUtils.getModelData(m)[1];
         return "INSERT INTO " + tbName + "(" + columns + ") VALUES(" + types + ")";
     }
     public String getPreparedInsertQuery(UsableMethods m) {
         String
-            columns = utils.getModelData(m)[1],
-            questionMark = utils.replaceForQuestion(columns);
+            columns = queryUtils.getModelData(m)[1],
+            questionMark = queryUtils.replaceForQuestion(columns);
         return "INSERT INTO " + tbName + "(" + columns + ") VALUES(" + questionMark + ")";
     }
     /**
@@ -50,23 +52,35 @@ public class QueryBuilder {
      * @param conditions: list of conditions.
      */
     public String getInnerJoinQuery(UsableMethods p, UsableMethods[] f, String[] ftb, ParamValue[] conditions) {
+        String
+            b = "SELECT ",
+            pColumns = queryUtils.getAlias(p, tbName);
+        b += pColumns + ", ";
+        for(int i=0; i<ftb.length; ++i) {
+            UsableMethods m = f[i];
+            String fColumns = queryUtils.getAlias(m, ftb[i]) + ", ";
+            b += fColumns;
+        }
+        b += "FROM " + tbName;
         for(int i=0; i<ftb.length; ++i) {
             ParamValue condition = conditions[i];
-            String whereClause = utils.getInnerJoinCondition(tbName, ftb[i], condition);
-            System.out.println(whereClause);
+            String where = " INNER JOIN " + ftb[i] + queryUtils.getInnerJoinCondition(
+                    tbName, ftb[i], condition
+            );
+            b += where;
         }
-        return "";
+        return b;
     }
     public String getPreparedUpdateQuery(UsableMethods m, ParamValue condition) {
         String
-            whereClause = utils.getNormalCondition(condition),
-            setValues = utils.getSetValues(m),
+            whereClause = queryUtils.getNormalCondition(condition),
+            setValues = queryUtils.getSetValues(m),
             b = "UPDATE " + tbName + " SET " + setValues + whereClause;
         return b;
     }
 
     public String getPreparedDeleteQuery(ParamValue condition) {
-        String b = utils.getPreparedCondition(condition);
+        String b = queryUtils.getPreparedCondition(condition);
         return "DELETE FROM " + tbName + b;
     }
 }
