@@ -14,6 +14,12 @@ public class TestModel implements UsableMethods {
     private String email;
     @TableData(constraint = "not null", type = "varchar(100)")
     private String rol;
+    @TableData(constraint = "not null", type = "date")
+    private String create_at;
+    @TableData(constraint = "not null", type = "date")
+    private String update_at;
 
     public TestModel(String name, String email, String rol) { }
+    public TestModel(String name, String email, String rol, String create_at) { }
+    public TestModel(String name, String email, String rol, String create_at, String update_at) { }
 }

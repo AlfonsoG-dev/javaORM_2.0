@@ -10,6 +10,7 @@ import Samples.TestODM;
 class javaORM {
     public static void main(String[] args) {
         TestODM t = new TestODM("alfonso", "alf@gmail.com", "admin");
+        t.setCreate_at();
         QueryBuilder builder = new QueryBuilder("contrasenias");
         System.out.println(builder.getInserQuery(t));
     }
