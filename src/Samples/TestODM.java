@@ -8,6 +8,8 @@ public class TestODM extends TestModel {
     public String rol;
     public String create_at;
     public String update_at;
+
+    public TestODM() { }
     
     public TestODM(String name, String email, String rol) {
         super(name, email, rol);

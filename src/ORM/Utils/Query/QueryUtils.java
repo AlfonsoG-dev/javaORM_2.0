@@ -9,7 +9,7 @@ public class QueryUtils {
     public QueryUtils() {
         modelUtils = new ModelUtils();
     }
-    public String cleanByType(String type, String query) {
+    private String cleanByType(String type, String query) {
         String b = "";
         switch(type.toLowerCase()) {
             case "and":
@@ -46,7 +46,7 @@ public class QueryUtils {
                 b += c + "=? " + t + " ";
             }
         }
-        return b;
+        return cleanByType(t, b);
     }
     public String getNormalCondition(ParamValue condition) {
         String 
@@ -65,7 +65,26 @@ public class QueryUtils {
                 b += c[i] + "='" + v[i] + "' " + t + " ";
             }
         }
-        return b;
+        return cleanByType(t, b);
+    }
+    /**
+     * ON pTableName.fk = fTableName.user.pk
+     */
+    public String getInnerJoinCondition(String pTableName, String fTableName, ParamValue condition) {
+        String 
+            t = "",
+            b = "";
+        if(!condition.getType().isEmpty()) {
+            t = condition.getType();
+        }
+        String[] 
+            columns = condition.getColumns(),
+            values = condition.getValues();
+        b += " ON";
+        for(int i=0; i<columns.length; ++i) {
+            b += " " + pTableName + "." + columns[i] + " = " + fTableName + "." + values[i] + " " + t; 
+        }
+        return cleanByType(t, b);
     }
     public String replaceForQuestion(String columns) {
         String b = "";
@@ -106,6 +125,14 @@ public class QueryUtils {
             v = getModelData(m)[0].split(",");
         for(int i=0; i<c.length; ++i) {
             b += c[i] + "=" + v[i] + ", ";
+        }
+        return clean(b, 2);
+    }
+    public String getAlias(UsableMethods m, String tableName) {
+        String b = "";
+        String[] columns = getModelData(m)[1].split(",");
+        for(String c: columns) {
+            b += tableName + "." + c + " AS " + tableName + "_" + c + ", ";
         }
         return clean(b, 2);
     }
