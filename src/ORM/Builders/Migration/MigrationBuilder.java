@@ -134,9 +134,24 @@ public class MigrationBuilder {
         }
         return getAlterTableQuery(b);
     }
-    public String getModifyTypeQuery() {
-        String b = "";
-        return b;
+    public String getModifyTypeQuery(String model) {
+        String 
+            toModify = migrationUtils.getCompareTypes(tableName, model).get("modify"),
+            b = "MODIFY COLUMN ";
+        if(toModify != null) {
+            String[]
+                modelColumns = modelUtils.getColumns(model, true).split(","),
+                types = toModify.split(",");
+            for(String t: types) {
+                String type = t.split(":")[0];
+                int index = Integer.parseInt(t.split(":")[1]);
+                b += modelColumns[index]  + " " + type + ", ";
+            }
+        }
+        if(b.length()-2 > 0) {
+            b = b.substring(0, b.length()-2);
+        }
+        return getAlterTableQuery(b);
     }
     public String getAddConstraintQuery() {
         String b = "";
