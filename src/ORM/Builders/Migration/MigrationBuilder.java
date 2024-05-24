@@ -101,7 +101,7 @@ public class MigrationBuilder {
                     b+= d + " " + addType + " AFTER " + afterColumn + ", ";
                 }
                 if(includeKeys) {
-                    b += getAddConstraintQuery(toAdd, foreignM, foreignT);
+                    b += getAddKeyConstraintQuery(toAdd, foreignM, foreignT);
                 }
             }
         }
@@ -123,7 +123,7 @@ public class MigrationBuilder {
             String[] columns = toRemove.split(",");
             for(String c: columns) {
                 if(c.contains("pk") || c.contains("fk")) {
-                    b += getRemoveConstraintQuery(c);
+                    b += getRemoveKeyConstraintQuery(c);
                 } else {
                     b += c + ", ";
                 }
@@ -153,7 +153,7 @@ public class MigrationBuilder {
         }
         return getAlterTableQuery(b);
     }
-    public String getAddConstraintQuery(String addColumns, String[] foreignM, String[] foreignT) {
+    public String getAddKeyConstraintQuery(String addColumns, String[] foreignM, String[] foreignT) {
         String b = "";
         String[] columns = addColumns.split(",");
         for(String c: columns) {
@@ -175,7 +175,7 @@ public class MigrationBuilder {
         }
         return b;
     }
-    public String getRemoveConstraintQuery(String column) {
+    public String getRemoveKeyConstraintQuery(String column) {
         String b = "DROP ";
         if(column.contains("pk")) {
             b += "PRIMARY KEY, ";
