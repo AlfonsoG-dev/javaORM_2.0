@@ -78,8 +78,15 @@ public interface UsableMethods {
 # Samples
 - [migrations](./src/Samples/Migration/MigrationSample.java)
 - [query]()
+
+>_ models:
+
 - [primary_model](./src/Samples/Models/primary/TestModel.java)
 - [foreign_model](./src/Samples/Models/Foreign/UsersModel.java)
+
+>_ model instances:
+
+- [ODM models](./src/Samples/Models/Primary/TestODM.java)
 
 # Disclaimer
 
