@@ -2,6 +2,8 @@ package ORM.Builders.Migration;
 
 import java.sql.Connection;
 
+import java.util.List;
+
 import ORM.Utils.Formats.UsableMethods;
 import ORM.Utils.Model.ModelUtils;
 import ORM.Utils.Query.MigrationUtils;
@@ -155,19 +157,18 @@ public class MigrationBuilder {
     }
     public String getAddKeyConstraintQuery(String addColumns, String[] foreignM, String[] foreignT) {
         String b = "";
-        String[] columns = addColumns.split(",");
-        for(String c: columns) {
-            if(c.contains("fk")) {
-                for(int i=0; i<foreignM.length; ++i) {
+        List<String> fks = modelUtils.getKeys(addColumns).get("fk");
+        for(int i=0; i<fks.size(); ++i) {
+            if(fks.size() == foreignM.length) {
                     String
                         table = foreignT[i],
                         model = foreignM[i],
-                        fk = modelUtils.getKeys(model).get("pk").get(0);
-                    if(c.contains(model) || c.contains(table)) {
-                        b += "ADD CONSTRAINT " + c + " FOREIGN KEY(" + c + ") REFERENCES " +
-                            table + "(" + fk + ") ON DELETE CASCADE ON UPDATE CASCADE, ";
+                        foreignPk = modelUtils.getKeys(model).get("pk").get(0);
+                    if(fks.get(i).contains(model)) {
+                        String primaryFK = fks.get(i);
+                        b += "ADD CONSTRAINT " + primaryFK + " FOREIGN KEY(" + primaryFK + ") REFERENCES " +
+                            table + "(" + foreignPk + ") ON DELETE CASCADE ON UPDATE CASCADE, ";
                     }
-                }
             }
         }
         if(b.length()-2 > 0) {
