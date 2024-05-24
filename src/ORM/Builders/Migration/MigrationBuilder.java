@@ -112,15 +112,13 @@ public class MigrationBuilder {
                 int index = modelUtils.getColumnIndex(primaryM, d, includeKeys);
                 addType = index < modelTypes.length ? modelTypes[index].replace("'", "") : null;
                 afterColumn = (index-1) < modelColumn.length ? modelColumn[index-1] : null;
-                if(addType != null && afterColumn != null) {
-                    if(addType.contains(".")) {
-                        addType = addType.split("\\.")[0];
-                    }
-                    b+= d + " " + addType + " AFTER " + afterColumn + ", ";
+                if(addType.contains(".")) {
+                    addType = addType.split("\\.")[0];
                 }
-                if(includeKeys) {
-                    b += getAddKeyConstraintQuery(toAdd, foreignM, foreignT);
-                }
+                b += d + " " + addType + " AFTER " + afterColumn + ", ";
+            }
+            if(includeKeys) {
+                b += getAddKeyConstraintQuery(toAdd, foreignM, foreignT);
             }
         }
         String clean = "";
@@ -172,29 +170,24 @@ public class MigrationBuilder {
         return getAlterTableQuery(b);
     }
     public String getAddKeyConstraintQuery(String addColumns, String[] foreignM, String[] foreignT) {
-        String
-            b = "",
-            pk = modelUtils.getKeys(addColumns).get("pk").get(0);
+        String b = "";
+        List<String> pk = modelUtils.getKeys(addColumns).get("pk");
         if(pk != null) {
-            b += "ADD CONSTRAINT " + pk + " PRIMARY KEY(" + pk + "), ";
+            b += "ADD CONSTRAINT " + pk.get(0) + " PRIMARY KEY(" + pk.get(0) + "), ";
         }
-        List<String>
-            fks = modelUtils.getKeys(addColumns).get("fk");
+        List<String> fks = modelUtils.getKeys(addColumns).get("fk");
         for(int i=0; i<fks.size(); ++i) {
-            if(fks.size() == foreignM.length) {
-                    String
-                        table = foreignT[i],
-                        model = foreignM[i],
-                        foreignPk = modelUtils.getKeys(model).get("pk").get(0);
-                    if(fks.get(i).contains(model)) {
-                        String primaryFK = fks.get(i);
-                        b += "ADD CONSTRAINT " + primaryFK + " FOREIGN KEY(" + primaryFK + ") REFERENCES " +
-                            table + "(" + foreignPk + ") ON DELETE CASCADE ON UPDATE CASCADE, ";
-                    }
+            if(fks != null && fks.size() == foreignM.length) {
+                String
+                    table = foreignT[i],
+                    model = foreignM[i],
+                    foreignPk = modelUtils.getKeys(model).get("pk").get(0);
+                if(fks.get(i).contains(table)) {
+                    String primaryFK = fks.get(i);
+                    b += "ADD CONSTRAINT " + primaryFK + " FOREIGN KEY(" + primaryFK + ") REFERENCES " +
+                        table + "(" + foreignPk + ") ON DELETE CASCADE ON UPDATE CASCADE, ";
+                }
             }
-        }
-        if(b.length()-2 > 0) {
-            b = b.substring(0, b.length()-2);
         }
         return b;
     }
@@ -204,9 +197,6 @@ public class MigrationBuilder {
             b += "PRIMARY KEY, ";
         } else if(column.contains("fk")) {
             b += "FOREIGN KEY " + column + ", ";
-        }
-        if(b.length()-2 > 0) {
-            b = b.substring(0, b.length()-2);
         }
         return b;
     }

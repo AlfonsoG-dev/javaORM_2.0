@@ -1,4 +1,4 @@
-package Samples.Models;
+package Samples.Models.Primary;
 
 import ORM.Utils.Formats.UsableMethods;
 import ORM.Utils.Model.TableData;
@@ -26,6 +26,8 @@ public class TestModel implements UsableMethods {
     private String create_at;
     @TableData(constraint = "not null", type = "date")
     private String update_at;
+    @TableData(constraint = "not null", type = "int")
+    private int users_id_fk;
 
     public TestModel() { }
     public TestModel(String name, String email, String rol) { }

@@ -1,15 +1,18 @@
+package Samples.Migration;
+
 import java.sql.Connection;
 
-import ORM.Builders.Migration.MigrationBuilder;
 import ORM.DbConnection.Connector;
-
 import ORM.Utils.Formats.DbConfig;
 
-import Samples.Models.Primary.TestModel;
-import Samples.Models.Foreign.*;
+import ORM.Builders.Migration.MigrationBuilder;
 
-class javaORM {
-    public static void main(String[] args) {
+import Samples.Models.Primary.TestModel;
+import Samples.Models.Foreign.UsersModel;
+
+public class MigrationSample {
+
+    public void addColumnSample() {
         Connection cursor = initDB();
         MigrationBuilder builder = new MigrationBuilder("users", cursor);
         TestModel model = new TestModel();
