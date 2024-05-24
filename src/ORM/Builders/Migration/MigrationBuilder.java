@@ -169,7 +169,7 @@ public class MigrationBuilder {
         }
         return getAlterTableQuery(b);
     }
-    public String getAddKeyConstraintQuery(String addColumns, String[] foreignM, String[] foreignT) {
+    private String getAddKeyConstraintQuery(String addColumns, String[] foreignM, String[] foreignT) {
         String b = "";
         List<String> pk = modelUtils.getKeys(addColumns).get("pk");
         if(pk != null) {
@@ -191,7 +191,7 @@ public class MigrationBuilder {
         }
         return b;
     }
-    public String getRemoveKeyConstraintQuery(String column) {
+    private String getRemoveKeyConstraintQuery(String column) {
         String b = "DROP ";
         if(column.contains("pk")) {
             b += "PRIMARY KEY, ";
