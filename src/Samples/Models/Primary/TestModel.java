@@ -12,25 +12,17 @@ public class TestModel implements UsableMethods {
     private String name;
     @TableData(constraint = "not null unique", type = "varchar(100)")
     private String email;
+    @TableData(constraint = "not null", type = "int")
+    private int users_id_fk;
     @TableData(constraint = "not null", type = "varchar(100)")
     private String rol;
-    @TableData(constraint = "not null", type = "varchar(100)")
-    private String password;
-    @TableData(constraint = "not null", type = "varchar(100)")
-    private String city;
-    @TableData(constraint = "not null", type = "varchar(100)")
-    private String ocupation;
-    @TableData(constraint = "not null", type = "varchar(100)")
-    private String direction;
     @TableData(constraint = "not null", type = "date")
     private String create_at;
     @TableData(constraint = "not null", type = "date")
     private String update_at;
-    @TableData(constraint = "not null", type = "int")
-    private int users_id_fk;
 
     public TestModel() { }
-    public TestModel(String name, String email, String rol) { }
-    public TestModel(String name, String email, String rol, String create_at) { }
-    public TestModel(String name, String email, String rol, String create_at, String update_at) { }
+    public TestModel(String name, String email, int users_id_fk, String rol) { }
+    public TestModel(String name, String email, int users_id_fk, String rol, String create_at) { }
+    public TestModel(String name, String email, int users_id_fk, String rol, String create_at, String update_at) { }
 }

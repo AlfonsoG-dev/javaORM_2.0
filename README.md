@@ -75,6 +75,12 @@ public interface UsableMethods {
 }
 ```
 
+# Samples
+- [migrations](./src/Samples/Migration/MigrationSample.java)
+- [query]()
+- [primary_model](./src/Samples/Models/primary/TestModel.java)
+- [foreign_model](./src/Samples/Models/Foreign/UsersModel.java)
+
 # Disclaimer
 
 - This project is for educational purposes.

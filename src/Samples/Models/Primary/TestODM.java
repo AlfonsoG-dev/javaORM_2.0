@@ -5,29 +5,33 @@ import java.time.format.DateTimeFormatter;
 public class TestODM extends TestModel {
     public String name;
     public String email;
+    public int users_id_fk;
     public String rol;
     public String create_at;
     public String update_at;
 
     public TestODM() { }
     
-    public TestODM(String name, String email, String rol) {
-        super(name, email, rol);
+    public TestODM(String name, String email, int users_id_fk, String rol) {
+        super(name, email, users_id_fk, rol);
         this.name = name;
         this.email = email;
+        this.users_id_fk = users_id_fk;
         this.rol = rol;
     }
-    public TestODM(String name, String email, String rol, String create_at) {
-        super(name, email, rol, create_at);
+    public TestODM(String name, String email, int users_id_fk, String rol, String create_at) {
+        super(name, email, users_id_fk, rol, create_at);
         this.name = name;
         this.email = email;
+        this.users_id_fk = users_id_fk;
         this.rol = rol;
         this.create_at = create_at;
     }
-    public TestODM(String name, String email, String rol, String create_at, String update_at) {
-        super(name, email, rol, create_at, update_at);
+    public TestODM(String name, String email, int users_id_fk, String rol, String create_at, String update_at) {
+        super(name, email, users_id_fk, rol, create_at, update_at);
         this.name = name;
         this.email = email;
+        this.users_id_fk = users_id_fk;
         this.rol = rol;
         this.create_at = create_at;
         this.update_at = update_at;
