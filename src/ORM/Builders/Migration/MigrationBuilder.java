@@ -80,6 +80,22 @@ public class MigrationBuilder {
         }
         return getAlterTableQuery(b);
     }
+    public String getRenameColumnQuery(String model) {
+        String
+            toRename = migrationUtils.getCompareColumnNames(tableName, model).get("rename"),
+            b = "";
+        if(toRename != null) {
+            String[] data = toRename.split(",");
+            for(String d: data) {
+                String[] value = d.split(":");
+                b += "RENAME COLUMN " + value[1] + " TO " + value[0] + ", ";
+            }
+        }
+        if(b.length()-2 > 0) {
+            b = b.substring(0, b.length()-2);
+        }
+        return getAlterTableQuery(b);
+    }
     public String getAddColumnQuery(String primaryM, String[] foreignM, String[] foreignT, boolean includeKeys) {
         String
             toAdd = migrationUtils.getCompareColumnNames(tableName, primaryM).get("add"),
@@ -156,8 +172,14 @@ public class MigrationBuilder {
         return getAlterTableQuery(b);
     }
     public String getAddKeyConstraintQuery(String addColumns, String[] foreignM, String[] foreignT) {
-        String b = "";
-        List<String> fks = modelUtils.getKeys(addColumns).get("fk");
+        String
+            b = "",
+            pk = modelUtils.getKeys(addColumns).get("pk").get(0);
+        if(pk != null) {
+            b += "ADD CONSTRAINT " + pk + " PRIMARY KEY(" + pk + "), ";
+        }
+        List<String>
+            fks = modelUtils.getKeys(addColumns).get("fk");
         for(int i=0; i<fks.size(); ++i) {
             if(fks.size() == foreignM.length) {
                     String
