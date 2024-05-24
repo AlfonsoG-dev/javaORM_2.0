@@ -1,5 +1,6 @@
 package Samples.Models.Foreign;
 
+import java.lang.reflect.Method;
 import java.sql.ResultSet;
 
 public class UsersODM extends UsersModel {
@@ -18,18 +19,49 @@ public class UsersODM extends UsersModel {
     public String getRol() {
         return rol;
     }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
 
     @SuppressWarnings("unchecked")
     @Override
     public UsersODM build(ResultSet rst) {
-        UsersODM m = null;
+        UsersODM m = new UsersODM();
         try {
+            int length = rst.getMetaData().getColumnCount();
             while(rst.next()) {
-                m = new UsersODM(rst.getString(2), rst.getString(3));
+                for(int i=1; i<=length; ++i) {
+                    String 
+                        columnName = rst.getMetaData().getColumnName(i),
+                        value = rst.getString(i);
+                    buildTest(columnName, value, m);
+                }
+                // m = new UsersODM(rst.getString(2), rst.getString(3));
             }
         } catch(Exception e) {
             e.printStackTrace();
         }
         return m;
+    }
+    private void buildTest(String rstColumnName, String rstValue, UsersODM instance) {
+        Class<?> c = UsersODM.class;
+        try {
+            Method[] methods = c.getMethods();
+            String compare = "set" + rstColumnName.substring(0, 1).toUpperCase().concat(rstColumnName.substring(1));
+            for(Method m: methods) {
+                if(m.getName().equals(compare)) {
+                    for(Class<?> p: m.getParameterTypes()) {
+                        if(p == String.class) {
+                            m.invoke(instance, rstValue);
+                        }
+                    }
+                }
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }
