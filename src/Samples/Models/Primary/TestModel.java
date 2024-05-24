@@ -1,5 +1,7 @@
 package Samples.Models.Primary;
 
+import java.sql.ResultSet;
+
 import ORM.Utils.Formats.UsableMethods;
 import ORM.Utils.Model.TableData;
 
@@ -25,4 +27,9 @@ public class TestModel implements UsableMethods {
     public TestModel(String name, String email, int users_id_fk, String rol) { }
     public TestModel(String name, String email, int users_id_fk, String rol, String create_at) { }
     public TestModel(String name, String email, int users_id_fk, String rol, String create_at, String update_at) { }
+    @Override
+    public <T> T build(ResultSet rst) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'build'");
+    }
 }
