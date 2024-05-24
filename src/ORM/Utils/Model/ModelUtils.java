@@ -2,8 +2,6 @@ package ORM.Utils.Model;
 
 import java.util.List;
 
-import ORM.Utils.Formats.UsableMethods;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 public class ModelUtils {

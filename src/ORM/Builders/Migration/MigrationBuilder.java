@@ -101,7 +101,7 @@ public class MigrationBuilder {
                     b+= d + " " + addType + " AFTER " + afterColumn + ", ";
                 }
                 if(includeKeys) {
-                    // TODO: create pk | fk constraint
+                    b += getAddConstraintQuery(toAdd, foreignM, foreignT);
                 }
             }
         }
@@ -123,9 +123,9 @@ public class MigrationBuilder {
             String[] columns = toRemove.split(",");
             for(String c: columns) {
                 if(c.contains("pk") || c.contains("fk")) {
-                    // TODO: create pk | fk drop constraint
+                    b += getRemoveConstraintQuery(c);
                 } else {
-                    b+= c + ", ";
+                    b += c + ", ";
                 }
             }
         }
@@ -153,12 +153,38 @@ public class MigrationBuilder {
         }
         return getAlterTableQuery(b);
     }
-    public String getAddConstraintQuery() {
+    public String getAddConstraintQuery(String addColumns, String[] foreignM, String[] foreignT) {
         String b = "";
+        String[] columns = addColumns.split(",");
+        for(String c: columns) {
+            if(c.contains("fk")) {
+                for(int i=0; i<foreignM.length; ++i) {
+                    String
+                        table = foreignT[i],
+                        model = foreignM[i],
+                        fk = modelUtils.getKeys(model).get("pk").get(0);
+                    if(c.contains(model) || c.contains(table)) {
+                        b += "ADD CONSTRAINT " + c + " FOREIGN KEY(" + c + ") REFERENCES " +
+                            table + "(" + fk + ") ON DELETE CASCADE ON UPDATE CASCADE, ";
+                    }
+                }
+            }
+        }
+        if(b.length()-2 > 0) {
+            b = b.substring(0, b.length()-2);
+        }
         return b;
     }
-    public String getRemoveConstraintQuery() {
-        String b = "";
+    public String getRemoveConstraintQuery(String column) {
+        String b = "DROP ";
+        if(column.contains("pk")) {
+            b += "PRIMARY KEY, ";
+        } else if(column.contains("fk")) {
+            b += "FOREIGN KEY " + column + ", ";
+        }
+        if(b.length()-2 > 0) {
+            b = b.substring(0, b.length()-2);
+        }
         return b;
     }
 }
