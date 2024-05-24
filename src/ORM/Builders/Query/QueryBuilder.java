@@ -23,6 +23,12 @@ public class QueryBuilder {
         b += queryUtils.getPreparedCondition(condition);
         return b;
     }
+    public String getPreparedInsertQuery(UsableMethods m) {
+        String
+            columns = queryUtils.getModelData(m)[1],
+            questionMark = queryUtils.replaceForQuestion(columns);
+        return "INSERT INTO " + tbName + "(" + columns + ") VALUES(" + questionMark + ")";
+    }
     /**
      * INSERT INTO tbName(column1, column2) values ('value1', 'value2');
      * INSERT INTO tbName values('value1', 'value2');
@@ -32,12 +38,6 @@ public class QueryBuilder {
             types = queryUtils.getModelData(m)[0],
             columns = queryUtils.getModelData(m)[1];
         return "INSERT INTO " + tbName + "(" + columns + ") VALUES(" + types + ")";
-    }
-    public String getPreparedInsertQuery(UsableMethods m) {
-        String
-            columns = queryUtils.getModelData(m)[1],
-            questionMark = queryUtils.replaceForQuestion(columns);
-        return "INSERT INTO " + tbName + "(" + columns + ") VALUES(" + questionMark + ")";
     }
     /**
      * select column as table_column, column_1 as table_column_1 from account INNER JOIN user ON account.fk=user.pk; 
