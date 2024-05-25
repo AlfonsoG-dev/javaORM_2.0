@@ -39,7 +39,6 @@ public class UsersODM extends UsersModel {
                         value = rst.getString(i);
                     buildTest(columnName, value, m);
                 }
-                // m = new UsersODM(rst.getString(2), rst.getString(3));
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -56,6 +55,9 @@ public class UsersODM extends UsersModel {
                     for(Class<?> p: m.getParameterTypes()) {
                         if(p == String.class) {
                             m.invoke(instance, rstValue);
+                        }
+                        if(p == int.class) {
+                            m.invoke(instance, Integer.parseInt(rstValue));
                         }
                     }
                 }
