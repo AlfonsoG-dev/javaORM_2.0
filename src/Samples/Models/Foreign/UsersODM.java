@@ -1,7 +1,5 @@
 package Samples.Models.Foreign;
 
-import ORM.Utils.Formats.UsableMethods;
-
 public class UsersODM extends UsersModel {
     public String description;
     public String rol;

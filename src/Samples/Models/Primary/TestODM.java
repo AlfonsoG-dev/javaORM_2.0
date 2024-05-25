@@ -68,13 +68,19 @@ public class TestODM extends TestModel {
         }
         return date;    
     }
-    public void setUpdate_at() {
+    public void setUpdate_at(String update_at) {
+        this.update_at = update_at;
+    }
+    public void setCreate_at(String create_at) {
+        this.create_at = create_at;
+    }
+    public void createUpdate_at() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
         LocalDateTime miDate  = LocalDateTime.now();  
         create_at             = dtf.format(miDate).toString();
     }
 
-    public void setCreate_at() {
+    public void createCreate_at() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  
         LocalDateTime miDate  = LocalDateTime.now();  
         create_at             = dtf.format(miDate).toString();
