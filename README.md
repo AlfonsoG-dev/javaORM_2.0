@@ -6,7 +6,7 @@
 
 - [x] Use prepared statements.
 - [x] Use Annotation base model for migrations. 
-- [x] Dinamyc class info loading.
+- [x] Dynamic class info loading.
 - [x] Query generation.
 
 # Additional information.
@@ -30,7 +30,7 @@ public class TestModel implements UsableMethods {
 - Its necessary to use the `UsableMethods` because it has the methods to initialize the database and table data.
 - And also it carries the instance data.
 
->_ For the `TestODM` declaration its only nedded the database data no the instance data.
+>_ For the `TestODM` declaration its only needed the database data no the instance data.
 - In order to get the instance data you need to create another class call `TestODM` that will supply the functionality.
 
 >_ The following is an instance class or model.
@@ -45,8 +45,16 @@ public class TestODM extends TestModel {
         this.description = description;
         this.userName = userName;
     }
+    public void setDescription(String val) {
+    }
+    public void setRol(String val) {
+    }
 }
 ```
+
+>- The `ODM` class must declare a *set* methods, this methods will be used to build the model using `java.reflect`.
+>- This class must declare an empty constructor for the same purpose.
+
 
 - This is the `UsableMethods` interface declaration
 ```java
@@ -86,7 +94,8 @@ public interface UsableMethods {
 
 >_ model instances:
 
-- [ODM models](./src/Samples/Models/Primary/TestODM.java)
+- [ODM models_P](./src/Samples/Models/Primary/TestODM.java)
+- [ODM models_F](./src/Samples/Models/Foreign/UsersODM.java)
 
 # Disclaimer
 
