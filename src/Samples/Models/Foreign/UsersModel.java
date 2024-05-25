@@ -1,7 +1,5 @@
 package Samples.Models.Foreign;
 
-import java.sql.ResultSet;
-
 import ORM.Utils.Formats.UsableMethods;
 import ORM.Utils.Model.TableData;
 
@@ -13,9 +11,4 @@ public class UsersModel implements UsableMethods {
     @TableData(constraint = "", type = "varchar(50)")
     private String rol;
     public UsersModel() { }
-    @SuppressWarnings("unchecked")
-    @Override
-    public UsersModel build(ResultSet rst) {
-        throw new UnsupportedOperationException("Unimplemented method 'build'");
-    }
 }

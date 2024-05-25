@@ -1,6 +1,5 @@
 package Samples.Models.Primary;
 import java.time.LocalDateTime;
-import java.sql.ResultSet;
 import java.time.format.DateTimeFormatter;
 
 public class TestODM extends TestModel {
@@ -81,42 +80,4 @@ public class TestODM extends TestModel {
         create_at             = dtf.format(miDate).toString();
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public TestODM build(ResultSet rst) {
-        TestODM m = null;
-        try {
-            int length = rst.getMetaData().getColumnCount();
-            while(rst.next()) {
-                if(length == 6) {
-                    m = new TestODM(
-                            rst.getString(2), 
-                            rst.getString(3),
-                            Integer.parseInt(rst.getString(4)),
-                            rst.getString(5),
-                            rst.getString(6),
-                            rst.getString(7)
-                    );
-                } else if(length == 5) {
-                    m = new TestODM(
-                            rst.getString(2), 
-                            rst.getString(3),
-                            Integer.parseInt(rst.getString(4)),
-                            rst.getString(5),
-                            rst.getString(6)
-                    );
-                } else if(length == 4) {
-                    m = new TestODM(
-                            rst.getString(2), 
-                            rst.getString(3),
-                            Integer.parseInt(rst.getString(4)),
-                            rst.getString(5)
-                    );
-                }
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return m;
-    }
 }
