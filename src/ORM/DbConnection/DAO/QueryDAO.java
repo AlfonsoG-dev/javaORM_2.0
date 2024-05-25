@@ -3,6 +3,7 @@ package ORM.DbConnection.DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,5 +46,193 @@ public class QueryDAO<T> {
             }
         }
         return data;
+    }
+    public List<String> preparedFind(ParamValue condition, String columns) {
+        PreparedStatement pstm = null;
+        ResultSet rst = null;
+        List<String> data = new ArrayList<>();
+        try {
+            rst = execute.preparedFindQuery(condition, columns, pstm);
+            int length = rst.getMetaData().getColumnCount();
+            while(rst.next()) {
+                String b = "";
+                for(int i=1; i<=length; ++i) {
+                    b += rst.getMetaData().getColumnName(i) + ":" + rst.getString(i) + ", ";
+                }
+                if(b.length()-2 > 0) {
+                    b = b.substring(0, b.length()-2);
+                }
+                data.add(b);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
+            if(pstm != null) {
+                try {
+                    pstm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                pstm = null;
+            }
+        }
+        return data;
+    }
+    public boolean preparedInsert(UsableMethods m) {
+        boolean isAdded = false;
+        PreparedStatement pstm = null;
+        int rst = 0;
+        try {
+            rst = execute.preparedInsertQuery(m, pstm);
+            if(rst > 0) {
+                isAdded = true;
+            } else {
+                System.err.println(
+                        "[ INFO ]: something happen while trying to execute preparedInsertQuery"
+                );
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(pstm != null) {
+                try {
+                    pstm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                pstm = null;
+            }
+        }
+        return isAdded;
+    }
+    public boolean insert(UsableMethods m) {
+        boolean isAdded = false;
+        Statement stm = null;
+        int rst = 0;
+        try {
+            rst = execute.insertQuery(m, stm);
+            if(rst > 0) {
+                isAdded = true;
+            } else {
+                System.err.println(
+                    "[ INFO ]: something happen while trying to execute insertQuery"
+                );
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(stm != null) {
+                try {
+                    stm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                stm = null;
+            }
+        }
+        return isAdded;
+    }
+    public List<String> innerJoin(UsableMethods m, UsableMethods[] foreignModel, String[] foreignTables,
+            ParamValue[] conditions) {
+        List<String> data = new ArrayList<>();
+        Statement stm = null;
+        ResultSet rst = null;
+        try {
+            rst = execute.innerJoinQuery(m, foreignModel, foreignTables, conditions, stm);
+            int length = rst.getMetaData().getColumnCount();
+            while(rst.next()) {
+                String b = "";
+                for(int i=1; i<=length; ++i) {
+                    String column = rst.getMetaData().getColumnName(i);
+                    b += column + ":" + rst.getString(i) + ", ";
+                }
+                if(b.length()-2 > 0) {
+                    b = b.substring(0, b.length()-2);
+                }
+                data.add(b);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
+            if(stm != null) {
+                try {
+                    stm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                stm = null;
+            }
+        }
+        return data;
+    }
+    public boolean preparedUpdate(UsableMethods m, ParamValue condition) {
+        boolean isUpdated = false;
+        PreparedStatement pstm = null;
+        int rst = 0;
+        try {
+            rst = execute.preparedUpdateQuery(m, condition, pstm);
+            if(rst > 0) {
+                isUpdated = true;
+            } else {
+                System.err.println(
+                        "[ INFO ]: something happen while trying to execute preparedUpdate"
+                );
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(pstm != null) {
+                try {
+                    pstm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                pstm = null;
+            }
+        }
+        return isUpdated;
+    }
+    public boolean preparedDelete(ParamValue condition) {
+        boolean isDeleted = false;
+        PreparedStatement pstm = null;
+        int rst = 0;
+        try {
+            rst = execute.preparedDeleteQuery(condition, pstm);
+            if(rst > 0) {
+                isDeleted = true;
+            } else {
+                System.err.println(
+                        "[ INFO ]: something happen while trying to execute preparedDelete"
+                );
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(pstm != null) {
+                try {
+                    pstm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                pstm = null;
+            }
+        }
+        return isDeleted;
     }
 }
