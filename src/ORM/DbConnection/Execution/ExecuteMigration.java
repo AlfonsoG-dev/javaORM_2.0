@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import ORM.Builders.Migration.MigrationBuilder;
+import ORM.Utils.Formats.ParamValue;
 import ORM.Utils.Formats.UsableMethods;
 
 public class ExecuteMigration {
@@ -57,6 +58,26 @@ public class ExecuteMigration {
     }
     public int modifyTypeQuery(String model, Statement stm) throws SQLException {
         String sql = builder.getModifyTypeQuery(model);
+        stm = cursor.createStatement();
+        return stm.executeUpdate(sql);
+    }
+    public int addCheckConstraintQuery(ParamValue params, Statement stm) throws SQLException {
+        String sql = builder.getAddChekConstraintQuery(params);
+        stm = cursor.createStatement();
+        return stm.executeUpdate(sql);
+    }
+    public int addDefaultConstraintQuery(ParamValue params, Statement stm) throws SQLException {
+        String sql = builder.getAddDefaultConstraintQuery(params);
+        stm = cursor.createStatement();
+        return stm.executeUpdate(sql);
+    }
+    public int removeCheckConstraintQuery(String name, Statement stm) throws SQLException {
+        String sql =  builder.getDeleteCheckConstraintQuery(name);
+        stm = cursor.createStatement();
+        return stm.executeUpdate(sql);
+    }
+    public int removeDefaultConstraintQuery(String name, Statement stm) throws SQLException {
+        String sql = builder.getDeleteDefaultConstraintQuery(name);
         stm = cursor.createStatement();
         return stm.executeUpdate(sql);
     }

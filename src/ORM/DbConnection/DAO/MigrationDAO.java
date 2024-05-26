@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 
 import ORM.DbConnection.Execution.ExecuteMigration;
+import ORM.Utils.Formats.ParamValue;
 import ORM.Utils.Formats.UsableMethods;
 
 public class MigrationDAO {
@@ -213,6 +214,115 @@ public class MigrationDAO {
             } else {
                 System.err.println(
                         "[ INFO ]: something happen while trying to execute modify type query"
+                );
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(stm != null) {
+                try {
+                    stm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                stm = null;
+            }
+        }
+        return isRemoved;
+    }
+    public boolean addCheckConstraint(ParamValue params) {
+        boolean isRemoved = false;
+        Statement stm = null;
+        int rst = 0;
+        try {
+            rst = execute.addCheckConstraintQuery(params, stm);
+            if(rst > 0) {
+                isRemoved = true;
+            } else {
+                System.err.println(
+                        "[ INFO ]: something happen while trying to execute add check constraint query"
+                );
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(stm != null) {
+                try {
+                    stm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                stm = null;
+            }
+        }
+        return isRemoved;
+    }
+    public boolean addDefaultConstraint(ParamValue params) {
+        boolean isRemoved = false;
+        Statement stm = null;
+        int rst = 0;
+        try {
+            rst = execute.addDefaultConstraintQuery(params, stm);
+            if(rst > 0) {
+                isRemoved = true;
+            } else {
+                System.err.println(
+                        "[ INFO ]: something happen while trying to execute add default constraint query"
+                );
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(stm != null) {
+                try {
+                    stm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                stm = null;
+            }
+        }
+        return isRemoved;
+    }
+    public boolean removeCheckConstraint(String name) {
+        boolean isRemoved = false;
+        Statement stm = null;
+        int rst = 0;
+        try {
+            rst = execute.removeCheckConstraintQuery(name, stm);
+            if(rst > 0) {
+                isRemoved = true;
+            } else {
+                System.err.println(
+                        "[ INFO ]: something happen while trying to execute remove check constraint query"
+                );
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(stm != null) {
+                try {
+                    stm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                stm = null;
+            }
+        }
+        return isRemoved;
+    }
+    
+    public boolean removeDefaultConstraint(String name) {
+        boolean isRemoved = false;
+        Statement stm = null;
+        int rst = 0;
+        try {
+            rst = execute.removeDefaultConstraintQuery(name, stm);
+            if(rst > 0) {
+                isRemoved = true;
+            } else {
+                System.err.println(
+                        "[ INFO ]: something happen while trying to execute remove default constraint query"
                 );
             }
         } catch(Exception e) {

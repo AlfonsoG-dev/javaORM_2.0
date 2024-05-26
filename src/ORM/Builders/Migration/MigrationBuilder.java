@@ -4,18 +4,22 @@ import java.sql.Connection;
 
 import java.util.List;
 
+import ORM.Utils.Formats.ParamValue;
 import ORM.Utils.Formats.UsableMethods;
 import ORM.Utils.Model.ModelUtils;
 import ORM.Utils.Query.MigrationUtils;
+import ORM.Utils.Query.QueryUtils;
 
 public class MigrationBuilder {
     private String tableName;
     private ModelUtils modelUtils;
     private MigrationUtils migrationUtils;
+    private QueryUtils queryUtils;
     public MigrationBuilder(String tableName, Connection cursor) {
         this.tableName = tableName;
         modelUtils = new ModelUtils();
         migrationUtils = new MigrationUtils(cursor);
+        queryUtils = new QueryUtils();
     }
     protected String getAlterTableQuery(String operations) {
         return "ALTER TABLE " + tableName + " " + operations;
@@ -74,7 +78,7 @@ public class MigrationBuilder {
             for(String s: spaces) {
                 c += s + ", ";
             }
-            b += c.substring(0, c.length()-2);
+            b += queryUtils.clean(c, 2);
         } else {
             b+= columns;
         }
@@ -91,9 +95,7 @@ public class MigrationBuilder {
                 b += "RENAME COLUMN " + value[1] + " TO " + value[0] + ", ";
             }
         }
-        if(b.length()-2 > 0) {
-            b = b.substring(0, b.length()-2);
-        }
+        b = queryUtils.clean(b, 2);
         return getAlterTableQuery(b);
     }
     public String getAddColumnQuery(String primaryM, String[] foreignM, String[] foreignT, boolean includeKeys) {
@@ -121,15 +123,8 @@ public class MigrationBuilder {
                 b += getAddKeyConstraintQuery(toAdd, foreignM, foreignT);
             }
         }
-        String clean = "";
-        if(!b.isEmpty()) {
-            if(includeKeys) {
-                clean = b.substring(0, b.length()-2);
-            } else {
-                clean = b;
-            }
-        }
-        return getAlterTableQuery(clean);
+        b = queryUtils.clean(b, 2);
+        return getAlterTableQuery(b);
     }
     public String getRemoveColumnQuery(String model) {
         String
@@ -145,9 +140,7 @@ public class MigrationBuilder {
                 }
             }
         }
-        if(b.length()-2 > 0) {
-            b = b.substring(0, b.length()-2);
-        }
+        b = queryUtils.clean(b, 2);
         return getAlterTableQuery(b);
     }
     public String getModifyTypeQuery(String model) {
@@ -164,9 +157,7 @@ public class MigrationBuilder {
                 b += modelColumns[index]  + " " + type + ", ";
             }
         }
-        if(b.length()-2 > 0) {
-            b = b.substring(0, b.length()-2);
-        }
+        b = queryUtils.clean(b, 2);
         return getAlterTableQuery(b);
     }
     private String getAddKeyConstraintQuery(String addColumns, String[] foreignM, String[] foreignT) {
@@ -190,6 +181,70 @@ public class MigrationBuilder {
             }
         }
         return b;
+    }
+    /**
+     * ALTER TABLE tableName ADD CONSTRAINT contraint_name value()
+     * @param params: columns: check_nombre, values: nombre in (''), values: edad > 18
+     */
+    public String getAddChekConstraintQuery(ParamValue params) {
+        String
+            t = "",
+            b = "ADD CONSTRAINT ";
+        if(!params.getType().isEmpty()) {
+            t = params.getType();
+        }
+        String[]
+            c = params.getColumns(),
+            v = params.getValues();
+        for(int i=0; i<c.length; ++i) {
+            b += "chk_" + c[i] + " CHECK (";
+            String l = "";
+            if(t.equals("s")) {
+                b += c[i] + " IN ('" + v[i] + "', ";
+            } else if(t.equals("i")) {
+                l += c[i] + " " + v[i] + " AND ";
+            }
+            b += queryUtils.clean(l, 5);
+        }
+        b = queryUtils.clean(b, 2) + ")";
+        return getAlterTableQuery(b);
+    }
+    public String getDeleteCheckConstraintQuery(String name) {
+        String b = "";
+        if(name.contains(",")) {
+            String[] names = name.split(",");
+            for(String n: names) {
+                b += "DROP CHECK " + n + ", ";
+            }
+            b = queryUtils.clean(b, 2);
+        } else {
+            b += "DROP CHECK " + name;
+        }
+        return getAlterTableQuery(b);
+    }
+    public String getAddDefaultConstraintQuery(ParamValue params) {
+        String b = "ALTER ";
+        String[]
+             c = params.getColumns(),
+             v = params.getValues();
+        for(int i=0; i<c.length; ++i) {
+            b += c[i] + " SET DEFAULT '" + v[i] + "', ";
+        }
+        b = queryUtils.clean(b, 2);
+        return getAlterTableQuery(b);
+    }
+    public String getDeleteDefaultConstraintQuery(String column) {
+        String b = "ALTER ";
+        if(column.contains(",")) {
+            String[] columns = column.split(",");
+            for(String c: columns) {
+                b += c.trim() + " DROP DEFAULT, "; 
+            }
+            b = queryUtils.clean(b, 2);
+        } else {
+                b += column + " DROP DEFAULT"; 
+        }
+        return getAlterTableQuery(b);
     }
     private String getRemoveKeyConstraintQuery(String column) {
         String b = "DROP ";
