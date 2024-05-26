@@ -18,6 +18,165 @@ public class QueryDAO<T> {
         execute = new ExecuteQuery(cursor, tableName);
         this.buildObject = build;
     }
+    public List<String> prepareCount(ParamValue condition, String columns) {
+        List<String> data = new ArrayList<>();
+        PreparedStatement pstm = null;
+        ResultSet rst = null;
+        try {
+            rst = execute.preparedSelectCountQuery(condition, columns, pstm);
+            int length = rst.getMetaData().getColumnCount();
+            while(rst.next()) {
+                String b = "";
+                for(int i=1; i<=length; ++i) {
+                    b = rst.getMetaData().getColumnName(i) + ":" + rst.getString(i) + "\n";
+                }
+                if(b.length()-1 > 0) {
+                    b = b.substring(0, b.length()-1);
+                }
+                data.add(b);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
+            if(pstm != null) {
+                try {
+                    pstm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                pstm = null;
+            }
+        }
+        return data;
+    }
+    public List<String> selectIn(ParamValue condition, String columns) {
+        List<String> data = new ArrayList<>();
+        Statement stm = null;
+        ResultSet rst = null;
+        try {
+            rst = execute.selectInQuery(condition, columns, stm);
+            int length = rst.getMetaData().getColumnCount();
+            while(rst.next()) {
+                String b = "";
+                for(int i=1; i<=length; ++i) {
+                    b = rst.getMetaData().getColumnName(i) + ":" + rst.getString(i) + "\n";
+                }
+                if(b.length()-1 > 0) {
+                    b = b.substring(0, b.length()-1);
+                }
+                data.add(b);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
+            if(stm != null) {
+                try {
+                    stm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                stm = null;
+            }
+        }
+        return data;
+    }
+
+    public List<String> selectPattern(ParamValue condition, String columns) {
+        List<String> data = new ArrayList<>();
+        Statement stm = null;
+        ResultSet rst = null;
+        try {
+            rst = execute.selectPatternQuery(condition, columns, stm);
+            int length = rst.getMetaData().getColumnCount();
+            while(rst.next()) {
+                String b = "";
+                for(int i=1; i<=length; ++i) {
+                    b = rst.getMetaData().getColumnName(i) + ":" + rst.getString(i) + "\n";
+                }
+                if(b.length()-1 > 0) {
+                    b = b.substring(0, b.length()-1);
+                }
+                data.add(b);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
+            if(stm != null) {
+                try {
+                    stm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                stm = null;
+            }
+        }
+        return data;
+    }
+
+    public List<String> selectMinMax(ParamValue params, ParamValue condition) {
+        List<String> data = new ArrayList<>();
+        PreparedStatement pstm = null;
+        ResultSet rst = null;
+        try {
+            rst = execute.preparedSelectMinMaxQuery(params, condition, pstm);
+            int length = rst.getMetaData().getColumnCount();
+            while(rst.next()) {
+                String b = "";
+                for(int i=1; i<=length; ++i) {
+                    b = rst.getMetaData().getColumnName(i) + ":" + rst.getString(i) + "\n";
+                }
+                if(b.length()-1 > 0) {
+                    b = b.substring(0, b.length()-1);
+                }
+                data.add(b);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
+            if(pstm != null) {
+                try {
+                    pstm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                pstm = null;
+            }
+        }
+        return data;
+    }
+
     public List<T> preparedSelect(ParamValue c) {
         List<T> data = new ArrayList<>();
         PreparedStatement pstm = null;
@@ -57,10 +216,10 @@ public class QueryDAO<T> {
             while(rst.next()) {
                 String b = "";
                 for(int i=1; i<=length; ++i) {
-                    b += rst.getMetaData().getColumnName(i) + ":" + rst.getString(i) + ", ";
+                    b += rst.getMetaData().getColumnName(i) + ":" + rst.getString(i) + "\n";
                 }
-                if(b.length()-2 > 0) {
-                    b = b.substring(0, b.length()-2);
+                if(b.length()-1 > 0) {
+                    b = b.substring(0, b.length()-1);
                 }
                 data.add(b);
             }
@@ -152,10 +311,10 @@ public class QueryDAO<T> {
                 String b = "";
                 for(int i=1; i<=length; ++i) {
                     String column = rst.getMetaData().getColumnName(i);
-                    b += column + ":" + rst.getString(i) + ", ";
+                    b += column + ":" + rst.getString(i) + "\n";
                 }
-                if(b.length()-2 > 0) {
-                    b = b.substring(0, b.length()-2);
+                if(b.length()-1 > 0) {
+                    b = b.substring(0, b.length()-1);
                 }
                 data.add(b);
             }

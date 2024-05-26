@@ -61,7 +61,7 @@ public class ExecuteQuery {
         stm = cursor.createStatement();
         return stm.executeQuery(sql);
     }
-    public ResultSet selectMinMaxQuery(ParamValue params, ParamValue condition, PreparedStatement pstm)
+    public ResultSet preparedSelectMinMaxQuery(ParamValue params, ParamValue condition, PreparedStatement pstm)
             throws SQLException {
         String sql = builder.getPreparedSelectMinMax(params, condition);
         pstm = cursor.prepareStatement(sql);
