@@ -14,6 +14,58 @@ public class QuerySample {
     public QuerySample(Connection cursor) {
         this.cursor = cursor;
     }
+    public void prepareCountSample() {
+        UsersODM m = new UsersODM();
+        QueryDAO<UsersODM> dao = new QueryDAO<>(cursor, "users", m);
+        String[]
+            c = {"rol"},
+            v = {"admin"};
+        ParamValue condition = new ParamValue(c, v, "or");
+        List<String> data = dao.prepareCount(condition, "description, rol");
+        for(String d: data) {
+            System.out.println(d);
+        }
+    }
+    public void selectInSample() {
+        UsersODM m = new UsersODM();
+        QueryDAO<UsersODM> dao = new QueryDAO<>(cursor, "users", m);
+        String[]
+            c = {"rol"},
+            v = {"test", "user", "admin"};
+        ParamValue condition = new ParamValue(c, v, "or");
+        List<String> data = dao.selectIn(condition, "description, rol");
+        for(String d: data) {
+            System.out.println(d);
+        }
+    }
+    public void selectPatternSample() {
+        UsersODM m = new UsersODM();
+        QueryDAO<UsersODM> dao = new QueryDAO<>(cursor, "users", m);
+        String[]
+            c = {"rol"},
+            v = {"test", "user", "admin"};
+        ParamValue condition = new ParamValue(c, v, "or");
+        List<String> data = dao.selectPattern(condition, "description, rol");
+        for(String d: data) {
+            System.out.println(d);
+        }
+    }
+    public void preparedSelectMinMaxSample() {
+        UsersODM m = new UsersODM();
+        QueryDAO<UsersODM> dao = new QueryDAO<>(cursor, "test", m);
+        String[]
+            c = {"min", "max"},
+            v = {"rol", "description"};
+        ParamValue params = new ParamValue(c, v, "");
+        String[]
+            c1 = {"rol"},
+            v1 = {"admin"};
+        ParamValue condition = new ParamValue(c1, v1, "and");
+        List<String> data = dao.preparedSelectMinMax(params, condition);
+        for(String d: data) {
+            System.out.println(d);
+        }
+    }
     public void preparedSelectSample() {
         UsersODM m = new UsersODM();
         QueryDAO<UsersODM> dao = new QueryDAO<>(cursor, "users", m);

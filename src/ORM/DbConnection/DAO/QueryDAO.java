@@ -137,7 +137,7 @@ public class QueryDAO<T> {
         return data;
     }
 
-    public List<String> selectMinMax(ParamValue params, ParamValue condition) {
+    public List<String> preparedSelectMinMax(ParamValue params, ParamValue condition) {
         List<String> data = new ArrayList<>();
         PreparedStatement pstm = null;
         ResultSet rst = null;
