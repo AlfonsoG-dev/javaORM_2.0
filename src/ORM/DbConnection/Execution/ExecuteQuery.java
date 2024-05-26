@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
 import ORM.Builders.Query.QueryBuilder;
 
 import ORM.Utils.Formats.ParamValue;
@@ -28,18 +29,43 @@ public class ExecuteQuery {
             pstm.setString((i+1), values[i].trim());
         }
     }
+    public ResultSet preparedSelectCountQuery(ParamValue condition, String columns, PreparedStatement pstm)
+        throws SQLException {
+        
+        String sql = builder.getPreparedCount(condition, columns);
+        pstm = cursor.prepareStatement(sql);
+        setPrepareStatementData(condition.getValues(), pstm);
+        return pstm.executeQuery();
+    }
     public ResultSet preparedSelectQuery(ParamValue c, PreparedStatement pstm) throws SQLException {
         String sql = builder.getPreparedSelectQuery(c);
         pstm = cursor.prepareStatement(sql);
         setPrepareStatementData(c.getValues(), pstm);
         return pstm.executeQuery();
     }
-
+    public ResultSet selectInQuery(ParamValue condition, String columns, Statement stm) throws SQLException {
+        String sql = builder.getSelectInQuery(condition, columns);
+        stm = cursor.createStatement();
+        return stm.executeQuery(sql);
+    }
     public ResultSet preparedFindQuery(ParamValue c, String columns, PreparedStatement pstm)
             throws SQLException {
         String sql = builder.getPreparedFindQuery(c, columns);
         pstm = cursor.prepareStatement(sql);
         setPrepareStatementData(c.getValues(), pstm);
+        return pstm.executeQuery();
+    }
+    public ResultSet selectPatternQuery(ParamValue condition, String columns, Statement stm) 
+        throws SQLException {
+        String sql = builder.getSelectPattern(condition, columns);
+        stm = cursor.createStatement();
+        return stm.executeQuery(sql);
+    }
+    public ResultSet selectMinMaxQuery(ParamValue params, ParamValue condition, PreparedStatement pstm)
+            throws SQLException {
+        String sql = builder.getPreparedSelectMinMax(params, condition);
+        pstm = cursor.prepareStatement(sql);
+        setPrepareStatementData(condition.getValues(), pstm);
         return pstm.executeQuery();
     }
     public int preparedInsertQuery(UsableMethods m, PreparedStatement pstm) throws SQLException {
