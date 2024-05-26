@@ -45,6 +45,12 @@ public class QueryBuilder {
         b += queryUtils.getPatternCondition(condition);
         return b;
     }
+    public String getPreparedSelectMinMax(ParamValue params, ParamValue condition) {
+        String b = "SELECT ";
+        b += queryUtils.getMinMaxSelection(params);
+        b += queryUtils.getPreparedCondition(condition);
+        return b;
+    }
     public String getPreparedInsertQuery(UsableMethods m) {
         String
             columns = queryUtils.getModelData(m)[1],
