@@ -67,6 +67,32 @@ public class QueryUtils {
         }
         return cleanByType(t, b);
     }
+    public String getInCondition(ParamValue condition) {
+        String
+            t = "",
+            cValues = "",
+            b = " WHERE ";
+        if(!condition.getType().isEmpty()) {
+            t = condition.getType();
+        }
+        String[]
+            c = condition.getColumns(),
+            v = condition.getValues();
+        for(int i=0; i<v.length; ++i) {
+            cValues += "'" + v[i] + "', ";
+        }
+        if(cValues.length()-2 > 0) {
+            cValues = cValues.substring(0, cValues.length()-2);
+        }
+        for(int i=0; i<c.length; ++i) {
+            if(t.equals("NOT")) {
+                b += " NOT " + c[i] + " IN " + "(" + cValues + ") AND ";
+            } else {
+                b += c[i] + " IN " + "(" + cValues + ") " + t + " ";
+            }
+        }
+        return cleanByType(t, b);
+    }
     /**
      * ON pTableName.fk = fTableName.user.pk
      */

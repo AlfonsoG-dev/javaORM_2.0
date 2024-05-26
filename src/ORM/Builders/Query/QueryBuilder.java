@@ -18,6 +18,11 @@ public class QueryBuilder {
         b += queryUtils.getPreparedCondition(condition);
         return b;
     }
+    public String getSelectInQuery(ParamValue condition, String columns) {
+        String b = "SELECT " + columns + " FROM " + tbName;
+        b += queryUtils.getInCondition(condition);
+        return b;
+    }
     public String getPreparedFindQuery(ParamValue condition, String columns) {
         String b = "SELECT " + columns + " FROM " + tbName;
         b += queryUtils.getPreparedCondition(condition);
