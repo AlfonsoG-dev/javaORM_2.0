@@ -93,6 +93,25 @@ public class QueryUtils {
         }
         return cleanByType(t, b);
     }
+    public String getPatternCondition(ParamValue condition) {
+        String 
+            t = "",
+            b = " WHERE ";
+        if(!condition.getType().isEmpty()) {
+            t = condition.getType();
+        }
+        String[]
+            c = condition.getColumns(),
+            v = condition.getValues();
+        for(int i=0; i<c.length; ++i) {
+            if(t.equals("NOT")) {
+                b += " NOT " + c[i] + " LIKE '" + v[i] + "' AND ";
+            } else {
+                b += c[i] + " LIKE '" + v[i] + "'" + t + " ";
+            }
+        }
+        return cleanByType(t, b);
+    }
     /**
      * ON pTableName.fk = fTableName.user.pk
      */

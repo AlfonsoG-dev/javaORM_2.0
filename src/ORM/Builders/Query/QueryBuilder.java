@@ -19,13 +19,30 @@ public class QueryBuilder {
         return b;
     }
     public String getSelectInQuery(ParamValue condition, String columns) {
+        if(columns.isEmpty()) {
+            columns = "*";
+        }
         String b = "SELECT " + columns + " FROM " + tbName;
         b += queryUtils.getInCondition(condition);
         return b;
     }
     public String getPreparedFindQuery(ParamValue condition, String columns) {
+        if(columns.isEmpty()) {
+            columns = "*";
+        }
         String b = "SELECT " + columns + " FROM " + tbName;
         b += queryUtils.getPreparedCondition(condition);
+        return b;
+    }
+    /**
+     * select * from table where nombre like 'regex'
+     */
+    public String getSelectPattern(ParamValue condition, String columns) {
+        if(columns.isEmpty()) {
+            columns = "*";
+        }
+        String b = "SELECT " + columns + " FROM " + tbName;
+        b += queryUtils.getPatternCondition(condition);
         return b;
     }
     public String getPreparedInsertQuery(UsableMethods m) {
