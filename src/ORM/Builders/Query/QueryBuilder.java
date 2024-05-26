@@ -13,6 +13,12 @@ public class QueryBuilder {
         queryUtils = new QueryUtils();
     }
 
+    public String getPreparedCount(ParamValue condition, String columns) {
+        String b = "SELECT ";
+        b += queryUtils.getCountSelection(columns);
+        b += queryUtils.getPreparedCondition(condition);
+        return b;
+    }
     public String getPreparedSelectQuery(ParamValue condition) {
         String b = "SELECT * FROM " + tbName;
         b += queryUtils.getPreparedCondition(condition);

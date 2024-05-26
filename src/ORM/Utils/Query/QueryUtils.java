@@ -141,6 +141,28 @@ public class QueryUtils {
         }
         return clean(b, 1);
     }
+    public String getMinMaxSelection(ParamValue params) {
+        String b = "";
+        String[] 
+            c = params.getColumns(),
+            v = params.getValues();
+        for(int i=0; i<c.length; ++i) {
+            if(c[i].equals("min")) {
+                b += "MIN(" + v[i] +") AS min_" + v[i] + ", ";
+            } else if(c[i].equals("max")) {
+                b += "MAX(" + v[i] +") AS max_" + v[i] + ", ";
+            }
+        }
+        return clean(b, 2);
+    }
+    public String getCountSelection(String columns) {
+        String b = "";
+        String[] c = columns.split(",");
+        for(int i=0; i<c.length; ++i) {
+            b += "COUNT(" + c[i] +") AS count_" + c[i] + ", ";
+        }
+        return clean(b, 2);
+    }
     public String[] getModelData(UsableMethods m) {
         String[]
             returns = new String[2],
