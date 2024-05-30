@@ -1,6 +1,7 @@
 package ORM.DbConnection.DAO;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 import ORM.DbConnection.Execution.ExecuteMigration;
@@ -15,10 +16,10 @@ public class MigrationDAO {
     public boolean createDatabase(String database) {
         boolean isCreated = false;
         Statement stm = null;
-        int rst = 0;
+        ResultSet rst = null;
         try {
-            rst = execute.createDatabaseQuery(database, stm);
-            if(rst > 0) {
+            rst = execute.createDatabaseQuery(database, stm).getGeneratedKeys();
+            if(rst.getMetaData().getColumnCount() > 0) {
                 isCreated = true;
             } else {
                 System.err.println(
@@ -28,6 +29,14 @@ public class MigrationDAO {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
             if(stm != null) {
                 try {
                     stm.close();
@@ -42,10 +51,10 @@ public class MigrationDAO {
     public boolean createTable(UsableMethods m, String type) {
         boolean isCreated = false;
         Statement stm = null;
-        int rst = 0;
+        ResultSet rst = null;
         try {
-            rst = execute.createTableQuery(m, type, stm);
-            if(rst > 0) {
+            rst = execute.createTableQuery(m, type, stm).getGeneratedKeys();
+            if(rst.getMetaData().getColumnCount() > 0) {
                 isCreated = true;
             } else {
                 System.err.println(
@@ -55,6 +64,14 @@ public class MigrationDAO {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
             if(stm != null) {
                 try {
                     stm.close();
@@ -69,10 +86,10 @@ public class MigrationDAO {
     public boolean createIndex(boolean unique, String columns) {
         boolean isCreated = false;
         Statement stm = null;
-        int rst = 0;
+        ResultSet rst = null;
         try {
-            rst = execute.createIndexQuery(unique, columns, stm);
-            if(rst > 0) {
+            rst = execute.createIndexQuery(unique, columns, stm).getGeneratedKeys();
+            if(rst.getMetaData().getColumnCount() > 0) {
                 isCreated = true;
             } else {
                 System.err.println(
@@ -82,6 +99,14 @@ public class MigrationDAO {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
             if(stm != null) {
                 try {
                     stm.close();
@@ -96,10 +121,10 @@ public class MigrationDAO {
     public boolean removeIndex(String column) {
         boolean isRemoved = false;
         Statement stm = null;
-        int rst = 0;
+        ResultSet rst = null;
         try {
-            rst = execute.removeIndexQuery(column, stm);
-            if(rst > 0) {
+            rst = execute.removeIndexQuery(column, stm).getGeneratedKeys();
+            if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
                 System.err.println(
@@ -109,6 +134,14 @@ public class MigrationDAO {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
             if(stm != null) {
                 try {
                     stm.close();
@@ -123,10 +156,10 @@ public class MigrationDAO {
     public boolean renameColumn(UsableMethods model) {
         boolean isRenamed = false;
         Statement stm = null;
-        int rst = 0;
+        ResultSet rst = null;
         try {
-            rst = execute.renameColumnQuery(model, stm);
-            if(rst > 0) {
+            rst = execute.renameColumnQuery(model, stm).getGeneratedKeys();
+            if(rst.getMetaData().getColumnCount() > 0) {
                 isRenamed = true;
             } else {
                 System.err.println(
@@ -136,6 +169,14 @@ public class MigrationDAO {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
             if(stm != null) {
                 try {
                     stm.close();
@@ -151,10 +192,12 @@ public class MigrationDAO {
             boolean includeKeys) {
         boolean isAdded = false;
         Statement stm = null;
-        int rst = 0;
+        ResultSet rst = null;
         try {
-            rst = execute.addColumnQuery(primaryModel, foreigModels, foreignTables, includeKeys, stm);
-            if(rst > 0) {
+            rst = execute.addColumnQuery(
+                    primaryModel, foreigModels, foreignTables, includeKeys, stm
+            ).getGeneratedKeys();
+            if(rst.getMetaData().getColumnCount() > 0) {
                 isAdded = true;
             } else {
                 System.err.println(
@@ -164,6 +207,14 @@ public class MigrationDAO {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
             if(stm != null) {
                 try {
                     stm.close();
@@ -178,10 +229,10 @@ public class MigrationDAO {
     public boolean removeColumn(UsableMethods model) {
         boolean isRemoved = false;
         Statement stm = null;
-        int rst = 0;
+        ResultSet rst = null;
         try {
-            rst = execute.removeColumnQuery(model, stm);
-            if(rst > 0) {
+            rst = execute.removeColumnQuery(model, stm).getGeneratedKeys();
+            if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
                 System.err.println(
@@ -191,6 +242,14 @@ public class MigrationDAO {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
             if(stm != null) {
                 try {
                     stm.close();
@@ -206,10 +265,10 @@ public class MigrationDAO {
     public boolean modifyType(UsableMethods model) {
         boolean isRemoved = false;
         Statement stm = null;
-        int rst = 0;
+        ResultSet rst = null;
         try {
-            rst = execute.modifyTypeQuery(model, stm);
-            if(rst > 0) {
+            rst = execute.modifyTypeQuery(model, stm).getGeneratedKeys();
+            if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
                 System.err.println(
@@ -219,6 +278,14 @@ public class MigrationDAO {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
             if(stm != null) {
                 try {
                     stm.close();
@@ -233,10 +300,10 @@ public class MigrationDAO {
     public boolean addCheckConstraint(ParamValue params) {
         boolean isRemoved = false;
         Statement stm = null;
-        int rst = 0;
+        ResultSet rst = null;
         try {
-            rst = execute.addCheckConstraintQuery(params, stm);
-            if(rst > 0) {
+            rst = execute.addCheckConstraintQuery(params, stm).getGeneratedKeys();
+            if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
                 System.err.println(
@@ -246,6 +313,14 @@ public class MigrationDAO {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
             if(stm != null) {
                 try {
                     stm.close();
@@ -260,10 +335,10 @@ public class MigrationDAO {
     public boolean addDefaultConstraint(ParamValue params) {
         boolean isRemoved = false;
         Statement stm = null;
-        int rst = 0;
+        ResultSet rst = null;
         try {
-            rst = execute.addDefaultConstraintQuery(params, stm);
-            if(rst > 0) {
+            rst = execute.addDefaultConstraintQuery(params, stm).getGeneratedKeys();
+            if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
                 System.err.println(
@@ -273,6 +348,14 @@ public class MigrationDAO {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
             if(stm != null) {
                 try {
                     stm.close();
@@ -287,10 +370,10 @@ public class MigrationDAO {
     public boolean removeCheckConstraint(String name) {
         boolean isRemoved = false;
         Statement stm = null;
-        int rst = 0;
+        ResultSet rst = null;
         try {
-            rst = execute.removeCheckConstraintQuery(name, stm);
-            if(rst > 0) {
+            rst = execute.removeCheckConstraintQuery(name, stm).getGeneratedKeys();
+            if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
                 System.err.println(
@@ -300,6 +383,14 @@ public class MigrationDAO {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
             if(stm != null) {
                 try {
                     stm.close();
@@ -315,10 +406,10 @@ public class MigrationDAO {
     public boolean removeDefaultConstraint(String name) {
         boolean isRemoved = false;
         Statement stm = null;
-        int rst = 0;
+        ResultSet rst = null;
         try {
-            rst = execute.removeDefaultConstraintQuery(name, stm);
-            if(rst > 0) {
+            rst = execute.removeDefaultConstraintQuery(name, stm).getGeneratedKeys();
+            if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
                 System.err.println(
@@ -328,6 +419,14 @@ public class MigrationDAO {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
             if(stm != null) {
                 try {
                     stm.close();
