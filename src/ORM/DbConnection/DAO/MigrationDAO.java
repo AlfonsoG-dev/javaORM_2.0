@@ -120,7 +120,7 @@ public class MigrationDAO {
         }
         return isRemoved;
     }
-    public boolean renameColumn(String model) {
+    public boolean renameColumn(UsableMethods model) {
         boolean isRenamed = false;
         Statement stm = null;
         int rst = 0;
@@ -175,7 +175,7 @@ public class MigrationDAO {
         }
         return isAdded;
     }
-    public boolean removeColumn(String model) {
+    public boolean removeColumn(UsableMethods model) {
         boolean isRemoved = false;
         Statement stm = null;
         int rst = 0;
@@ -203,7 +203,7 @@ public class MigrationDAO {
         return isRemoved;
     }
 
-    public boolean modifyType(String model) {
+    public boolean modifyType(UsableMethods model) {
         boolean isRemoved = false;
         Statement stm = null;
         int rst = 0;

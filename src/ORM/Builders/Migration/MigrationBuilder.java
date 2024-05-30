@@ -183,7 +183,8 @@ public class MigrationBuilder {
         return b;
     }
     /**
-     * ALTER TABLE tableName ADD CONSTRAINT contraint_name value()
+     * ALTER TABLE tableName ADD CONSTRAINT contraint_name value().
+     * <br> pre: </br> i: indicates a numbre value, s: indicates a string value.
      * @param params: columns: check_nombre, values: nombre in (''), values: edad > 18
      */
     public String getAddChekConstraintQuery(ParamValue params) {

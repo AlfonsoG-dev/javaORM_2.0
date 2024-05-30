@@ -39,8 +39,8 @@ public class ExecuteMigration {
         stm = cursor.createStatement();
         return stm.executeUpdate(sql);
     }
-    public int renameColumnQuery(String model, Statement stm) throws SQLException {
-        String sql = builder.getRenameColumnQuery(model);
+    public int renameColumnQuery(UsableMethods model, Statement stm) throws SQLException {
+        String sql = builder.getRenameColumnQuery(model.initModel());
         stm = cursor.createStatement();
         return stm.executeUpdate(sql);
     }
@@ -51,13 +51,13 @@ public class ExecuteMigration {
         return stm.executeUpdate(sql);
     }
 
-    public int removeColumnQuery(String model, Statement stm) throws SQLException {
-        String sql = builder.getRemoveColumnQuery(model);
+    public int removeColumnQuery(UsableMethods model, Statement stm) throws SQLException {
+        String sql = builder.getRemoveColumnQuery(model.initModel());
         stm = cursor.createStatement();
         return stm.executeUpdate(sql);
     }
-    public int modifyTypeQuery(String model, Statement stm) throws SQLException {
-        String sql = builder.getModifyTypeQuery(model);
+    public int modifyTypeQuery(UsableMethods model, Statement stm) throws SQLException {
+        String sql = builder.getModifyTypeQuery(model.initModel());
         stm = cursor.createStatement();
         return stm.executeUpdate(sql);
     }
