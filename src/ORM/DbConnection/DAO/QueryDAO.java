@@ -12,11 +12,16 @@ import ORM.Utils.Formats.ParamValue;
 import ORM.Utils.Formats.UsableMethods;
 
 public class QueryDAO<T> {
+    private Connection cursor;
     private ExecuteQuery execute;
     private UsableMethods buildObject;
     public QueryDAO(Connection cursor, String tableName, UsableMethods build) {
+        this.cursor = cursor;
         execute = new ExecuteQuery(cursor, tableName);
         this.buildObject = build;
+    }
+    public Connection getConnection() {
+        return cursor;
     }
     public List<String> prepareCount(ParamValue condition, String columns) {
         List<String> data = new ArrayList<>();
