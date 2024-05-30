@@ -13,10 +13,12 @@ import ORM.Utils.Formats.UsableMethods;
 
 public class QueryDAO<T> {
     private Connection cursor;
+    private String tableName;
     private ExecuteQuery execute;
     private UsableMethods buildObject;
     public QueryDAO(Connection cursor, String tableName, UsableMethods build) {
         this.cursor = cursor;
+        this.tableName = tableName;
         execute = new ExecuteQuery(cursor, tableName);
         this.buildObject = build;
     }
@@ -40,6 +42,37 @@ public class QueryDAO<T> {
                 }
                 data.add(b);
             }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(rst != null) {
+                try {
+                    rst.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                rst = null;
+            }
+            if(pstm != null) {
+                try {
+                    pstm.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                pstm = null;
+            }
+        }
+        return data;
+    }
+    public List<T> readAll() {
+        List<T> data = new ArrayList<>();
+        PreparedStatement pstm = null;
+        ResultSet rst = null;
+        try {
+            String sql = "SELECT * FROM " + tableName;
+            pstm = cursor.prepareStatement(sql);
+            data.add(buildObject.build(rst));
+            rst = pstm.executeQuery();
         } catch(Exception e) {
             e.printStackTrace();
         } finally {

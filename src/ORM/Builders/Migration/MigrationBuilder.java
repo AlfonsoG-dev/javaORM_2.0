@@ -43,9 +43,9 @@ public class MigrationBuilder {
         for(int i=0; i<c.length; ++i) {
             t[i] = t[i].replace("'", "");
             if(t[i].contains(".")) {
-                t[i] = foreign;
+                t[i] = foreign.replace("'", "");
             }
-            value += c[i] + " " + t[i] + ", ";
+            value += c[i] + " " + t[i].replace("'", "") + ", ";
         }
         String
             v = value.substring(0, value.length()-2),
