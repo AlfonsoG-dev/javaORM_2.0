@@ -135,8 +135,15 @@ public class ModelMetadata {
         Method m = null;
         try {
             Method t = myClass.getMethod(methodName);
-            if(t.invoke(instance) != null) {
-                m = t;
+            Class<?> returnType = t.getReturnType();
+            if(returnType == String.class) {
+                if(t.invoke(instance) != null) {
+                    m = t;
+                }
+            } else if(returnType == int.class) {
+                if((int) t.invoke(instance) > 0) {
+                    m = t;
+                }
             }
         } catch(Exception e) {
             //
