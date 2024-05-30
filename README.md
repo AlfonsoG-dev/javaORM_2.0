@@ -97,6 +97,11 @@ public interface UsableMethods {
 - [ODM models_P](./src/Samples/Models/Primary/TestODM.java)
 - [ODM models_F](./src/Samples/Models/Foreign/UsersODM.java)
 
+# How to.
+
+- this is the description on how to use the application.
+- [ ] add how to instructions.
+
 # Disclaimer
 
 - This project is for educational purposes.
