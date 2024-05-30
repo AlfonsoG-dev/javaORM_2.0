@@ -6,7 +6,7 @@ import ORM.Utils.Formats.DbConfig;
 
 class javaORM {
     public static void main(String[] args) {
-        Connection cursor = initDB();
+        // Connection cursor = initDB();
     }
 
     public static Connection initDB() {

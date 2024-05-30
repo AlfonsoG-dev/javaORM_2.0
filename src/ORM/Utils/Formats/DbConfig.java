@@ -15,13 +15,21 @@ public class DbConfig {
         this.password = password;
         this.dbName = dbName;
     }
+    public String getHost() {
+        return host;
+    }
     public String getUser() {
         return user;
+    }
+    public int getPort() {
+        return port;
     }
     public String getPassword() {
         return password;
     }
-
+    public String getDbName() {
+        return dbName;
+    }
     public String getURL() {
         return "jdbc:mysql://" + this.host + ":" + this.port + "/" + this.dbName;
     }
