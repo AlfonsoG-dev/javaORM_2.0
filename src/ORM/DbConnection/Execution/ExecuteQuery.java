@@ -5,7 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.ArrayList;
+import java.util.List;
 
 import ORM.Builders.Query.QueryBuilder;
 
@@ -94,9 +95,25 @@ public class ExecuteQuery {
     }
     public int preparedUpdateQuery(UsableMethods m, ParamValue c, PreparedStatement pstm)
         throws SQLException {
-        String sql = builder.getPreparedUpdateQuery(m, c);
+        String 
+            types = modelUtils.getTypes(m.getInstanceData(), true),
+            sql = builder.getPreparedUpdateQuery(m, c);
         pstm = cursor.prepareStatement(sql);
-        setPrepareStatementData(c.getValues(), pstm);
+        String[] 
+            setValues = types.split(","),
+            conditionValues   = c.getValues();
+        // set the condition values
+        List<String> val = new ArrayList<>();
+        for(String s: setValues) {
+            val.add(s.replace("'", ""));
+        }
+        for(String s: conditionValues) {
+            val.add(s);
+        }
+        // set the update values
+        for(int i=0; i<val.size(); ++i) {
+            pstm.setString((i+1), val.get(i));
+        }
         return pstm.executeUpdate();
     }
 

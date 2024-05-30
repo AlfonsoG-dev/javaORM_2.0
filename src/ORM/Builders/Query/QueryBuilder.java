@@ -104,7 +104,7 @@ public class QueryBuilder {
     }
     public String getPreparedUpdateQuery(UsableMethods m, ParamValue condition) {
         String
-            whereClause = queryUtils.getNormalCondition(condition),
+            whereClause = queryUtils.getPreparedCondition(condition),
             setValues = queryUtils.getSetValues(m),
             b = "UPDATE " + tbName + " SET " + setValues + whereClause;
         return b;

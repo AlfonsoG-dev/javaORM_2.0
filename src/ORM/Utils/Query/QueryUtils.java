@@ -187,11 +187,9 @@ public class QueryUtils {
 
     public String getSetValues(UsableMethods m) {
         String b = "";
-        String[]
-            c = getModelData(m)[1].split(","),
-            v = getModelData(m)[0].split(",");
+        String[] c = getModelData(m)[1].split(",");
         for(int i=0; i<c.length; ++i) {
-            b += c[i] + "=" + v[i] + ", ";
+            b += c[i] + "=?, ";
         }
         return clean(b, 2);
     }
