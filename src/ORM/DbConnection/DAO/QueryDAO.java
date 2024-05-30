@@ -71,8 +71,8 @@ public class QueryDAO<T> {
         try {
             String sql = "SELECT * FROM " + tableName;
             pstm = cursor.prepareStatement(sql);
-            data.add(buildObject.build(rst));
             rst = pstm.executeQuery();
+            data.add(buildObject.build(rst));
         } catch(Exception e) {
             e.printStackTrace();
         } finally {

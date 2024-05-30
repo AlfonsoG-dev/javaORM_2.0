@@ -26,7 +26,12 @@ public class ExecuteQuery {
     }
     protected void setPrepareStatementData(String[] values, PreparedStatement pstm) throws SQLException {
         for(int i=0; i<values.length; ++i) {
-            pstm.setString((i+1), values[i].trim());
+            if(values[i] != null && values[i].contains("'")) {
+                values[i] = values[i].replace("'", "");
+            }
+            if(values[i] != null && (i+1) < values.length) {
+                pstm.setString((i+1), values[i].trim());
+            }
         }
     }
     public ResultSet preparedSelectCountQuery(ParamValue condition, String columns, PreparedStatement pstm)
