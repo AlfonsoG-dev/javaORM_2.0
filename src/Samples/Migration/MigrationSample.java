@@ -2,10 +2,9 @@ package Samples.Migration;
 
 import java.sql.Connection;
 
-import ORM.DbConnection.Connector;
 import ORM.DbConnection.DAO.MigrationDAO;
-import ORM.Utils.Formats.DbConfig;
 import ORM.Utils.Formats.ParamValue;
+
 import Samples.Models.Primary.TestModel;
 import Samples.Models.Foreign.UsersModel;
 
