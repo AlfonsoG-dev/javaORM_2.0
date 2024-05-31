@@ -167,16 +167,18 @@ public class MigrationBuilder {
             b += "ADD CONSTRAINT " + pk.get(0) + " PRIMARY KEY(" + pk.get(0) + "), ";
         }
         List<String> fks = modelUtils.getKeys(addColumns).get("fk");
-        for(int i=0; i<fks.size(); ++i) {
-            if(fks != null && fks.size() == foreignM.length) {
-                String
-                    table = foreignT[i],
-                    model = foreignM[i],
-                    foreignPk = modelUtils.getKeys(model).get("pk").get(0);
-                if(fks.get(i).contains(table)) {
-                    String primaryFK = fks.get(i);
-                    b += "ADD CONSTRAINT " + primaryFK + " FOREIGN KEY(" + primaryFK + ") REFERENCES " +
-                        table + "(" + foreignPk + ") ON DELETE CASCADE ON UPDATE CASCADE, ";
+        if(foreignM != null && foreignT != null) {
+            for(int i=0; i<fks.size(); ++i) {
+                if(fks != null && fks.size() == foreignM.length) {
+                    String
+                        table = foreignT[i],
+                        model = foreignM[i],
+                        foreignPk = modelUtils.getKeys(model).get("pk").get(0);
+                    if(fks.get(i).contains(table)) {
+                        String primaryFK = fks.get(i);
+                        b += "ADD CONSTRAINT " + primaryFK + " FOREIGN KEY(" + primaryFK + ") REFERENCES " +
+                            table + "(" + foreignPk + ") ON DELETE CASCADE ON UPDATE CASCADE, ";
+                    }
                 }
             }
         }
