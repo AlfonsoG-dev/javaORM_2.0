@@ -82,6 +82,7 @@ public class TestODM extends TestModel {
 
 >- The `ODM` class must declare a *set* methods, this methods will be used to build the model using `java.reflect`.
 >- This class must declare an empty constructor for the same purpose.
+>_ Also in this class all *private* attributes will be ignored for the build process, only public members are allowed.
 
 - All of the SELECT type DAO operations returns a list of the generic class because the *UsableMethods* interface use *java.lang.reflect* to build the class instance from the *ResultSet* of the statement execution.
 ```java
