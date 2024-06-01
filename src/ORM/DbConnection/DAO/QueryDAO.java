@@ -72,7 +72,7 @@ public class QueryDAO<T> {
             String sql = "SELECT * FROM " + tableName;
             pstm = cursor.prepareStatement(sql);
             rst = pstm.executeQuery();
-            data.add(buildObject.build(rst));
+            data.addAll(buildObject.build(rst));
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
@@ -221,7 +221,7 @@ public class QueryDAO<T> {
         ResultSet rst = null;
         try {
             rst = execute.preparedSelectQuery(c, pstm);
-            data.add(buildObject.build(rst));
+            data.addAll(buildObject.build(rst));
         } catch(Exception e) {
             e.printStackTrace();
         } finally {

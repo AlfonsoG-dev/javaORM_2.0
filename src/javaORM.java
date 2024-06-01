@@ -1,12 +1,20 @@
 import java.sql.Connection;
 
 import ORM.DbConnection.Connector;
+import ORM.DbConnection.DAO.QueryDAO;
+
 import ORM.Utils.Formats.DbConfig;
 
+import Samples.Models.Primary.UserModel;
 
-class javaORM {
+
+public class javaORM {
     public static void main(String[] args) {
-        // Connection cursor = initDB();
+        Connection cursor = initDB();
+        QueryDAO<UserModel> dao = new QueryDAO<>(cursor, "users", new UserModel());
+        for(UserModel m: dao.readAll()) {
+            System.out.println(m.getInstanceData());
+        }
     }
 
     public static Connection initDB() {
