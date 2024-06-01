@@ -2,6 +2,20 @@
 
 - In this iteration i want to use java.reflect to get the instance data of a model.
 
+>_ For this purpose is necessary to use 2 classes, one if used as a table model, the other one is used to perform CRUD operations and it needs to have in its name the ODM sentence at the end.
+
+>>_ Also the model can be use for SELECT operation and the ODM class is used for INSERT, UPDATE, DELETE operations.
+
+# References
+- [java.lang.reflect](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/package-summary.html)
+- [java mysql orm 1.0](https://github.com/AlfonsoG-dev/javaMysqlORM)
+- [mysql tutorial](https://www.w3schools.com/mysql/)
+
+# Dependencies
+- [java build tool](https://github.com/AlfonsoG-dev/javaBuild)
+- [mysql JDBC_8.3.0](https://dev.mysql.com/downloads/connector/j/5.1.html)
+- [java_jdk_17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+
 # Features 
 
 - [x] Use prepared statements.
@@ -85,11 +99,11 @@ public interface UsableMethods {
 
 # Samples
 - [migrations](./src/Samples/Migration/MigrationSample.java)
-- [query]()
+- [query](./src/Samples/Query/QuerySample.java)
 
 >_ models:
 
-- [primary_model](./src/Samples/Models/primary/TestModel.java)
+- [primary_model](./src/Samples/Models/Primary/TestModel.java)
 - [foreign_model](./src/Samples/Models/Foreign/UsersModel.java)
 
 >_ model instances:
@@ -98,9 +112,9 @@ public interface UsableMethods {
 - [ODM models_F](./src/Samples/Models/Foreign/UsersODM.java)
 
 # How to.
+- [password manager](https://github.com/AlfonsoG-dev/gestorPassword)
 
-- this is the description on how to use the application.
-- [ ] add how to instructions.
+>_ the password manager project uses this *ORM* to perform CRUD operations with a MYSQL database.
 
 # Disclaimer
 
