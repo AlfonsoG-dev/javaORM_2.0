@@ -27,6 +27,9 @@ public class ExecuteQuery {
     }
     protected void setPrepareStatementData(String[] values, PreparedStatement pstm) throws SQLException {
         for(int i=0; i<values.length; ++i) {
+            if(values[i].contains("'")) {
+                values[i] = values[i].replace("'", "");
+            }
             pstm.setString((i+1), values[i]);
         }
     }
