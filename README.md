@@ -34,10 +34,16 @@ public class TestModel implements UsableMethods {
     private String description;
     @TableData(constraint = "not null unique", type = "varchar(100)")
     private String userName;
-    
-    public TestModel(String description, String userName) {
-        this.description = description;
-        this.userName = userName;
+    public TestModel() { }
+
+    public int getId_pk() {
+        return id_pk;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public String getUserName() {
+        return userName;
     }
 }
 ```
@@ -59,9 +65,17 @@ public class TestODM extends TestModel {
         this.description = description;
         this.userName = userName;
     }
+    public String getDescription() {
+        return description;
+    }
     public void setDescription(String val) {
+        description = val;
+    }
+    public String getUserName() {
+        return userName;
     }
     public void setRol(String val) {
+        userName = val;
     }
 }
 ```
@@ -69,31 +83,23 @@ public class TestODM extends TestModel {
 >- The `ODM` class must declare a *set* methods, this methods will be used to build the model using `java.reflect`.
 >- This class must declare an empty constructor for the same purpose.
 
-
-- This is the `UsableMethods` interface declaration
+- All of the SELECT type DAO operations returns a list of the generic class because the *UsableMethods* interface use *java.lang.reflect* to build the class instance from the *ResultSet* of the statement execution.
 ```java
-public interface UsableMethods {
-
-    /**
-    * This methods use java.reflect to invoke all the methods that starts with getMethodName.
-    * The model also will have to declare the attributes with public scope.
-    * All the attributes that are declare with private scope will be ignored.
-    * The ODM class will be use for this.
-    */
-    public default String getInstanceData() {
-        ModelMetadata metadata = new ModelMetadata(this.getClass());
-        return metadata.getInstanceData(this);
+List<T> data = new ArrayList();
+T m = null;
+while(rst.next()) {
+    m = (T) this.getClass().getConstructor().newInstance();
+    for(int i=1; i<=length; ++i) {
+        String 
+            columnName = rst.getMetaData().getColumnName(i),
+            value = rst.getString(i);
+        /**
+         * the instance have an empty constructor, the *buildTest* method invokes all methods that start with 'set' to add data to the instance, the name of the method mus be equal to the rst table column with 'set' at the start. 
+         * all set methods receive a value as parameter, the *value form rst is the data from the table row. 
+        */
+        buildTest(columnName, value, m);
     }
-
-    /**
-    * this method use java.reflect to get the Annotation data of all the attributes.
-    * The class that is use as model only declare private fields and the public field is a constructor used for the ODM class.
-    * the model class will be used for this.
-    */
-    public default String initModel() {
-        ModelMetadata metadata = new ModelMetadata(this.getClass());
-        return metadata.getProperties();
-    }
+    data.add(m);
 }
 ```
 
@@ -112,6 +118,7 @@ public interface UsableMethods {
 - [ODM models_F](./src/Samples/Models/Foreign/UsersODM.java)
 
 # How to.
+
 - [password manager](https://github.com/AlfonsoG-dev/gestorPassword)
 
 >_ the password manager project uses this *ORM* to perform CRUD operations with a MYSQL database.
