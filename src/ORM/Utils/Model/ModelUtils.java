@@ -24,9 +24,12 @@ public class ModelUtils {
             }
         } else {
             for(int i=0; i<data.length; ++i) {
-                String type = data[i].split(":", 2)[1].trim();
-                if(!type.isEmpty()) {
-                    ts += "'" + type + "',";
+                String[] spaces = data[i].split(":", 2);
+                if(spaces.length >= 1) {
+                    String type = spaces[1].trim();
+                    if(!type.isEmpty()) {
+                        ts += "'" + type + "',";
+                    }
                 }
             }
         }
