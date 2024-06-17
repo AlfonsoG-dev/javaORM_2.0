@@ -17,11 +17,19 @@ public class QueryBuilder {
         String b = "SELECT ";
         b += queryUtils.getCountSelection(columns);
         b += queryUtils.getPreparedCondition(condition);
+        int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
+        if(limit != -1) {
+            b += " LIMIT " + limit;
+        }
         return b;
     }
     public String getPreparedSelectQuery(ParamValue condition) {
         String b = "SELECT * FROM " + tbName;
         b += queryUtils.getPreparedCondition(condition);
+        int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
+        if(limit != -1) {
+            b += " LIMIT " + limit;
+        }
         return b;
     }
     public String getSelectInQuery(ParamValue condition, String columns) {
@@ -30,6 +38,10 @@ public class QueryBuilder {
         }
         String b = "SELECT " + columns + " FROM " + tbName;
         b += queryUtils.getInCondition(condition);
+        int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
+        if(limit != -1) {
+            b += " LIMIT " + limit;
+        }
         return b;
     }
     public String getPreparedFindQuery(ParamValue condition, String columns) {
@@ -38,6 +50,10 @@ public class QueryBuilder {
         }
         String b = "SELECT " + columns + " FROM " + tbName;
         b += queryUtils.getPreparedCondition(condition);
+        int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
+        if(limit != -1) {
+            b += " LIMIT " + limit;
+        }
         return b;
     }
     /**
@@ -49,12 +65,20 @@ public class QueryBuilder {
         }
         String b = "SELECT " + columns + " FROM " + tbName;
         b += queryUtils.getPatternCondition(condition);
+        int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
+        if(limit != -1) {
+            b += " LIMIT " + limit;
+        }
         return b;
     }
     public String getPreparedSelectMinMax(ParamValue params, ParamValue condition) {
         String b = "SELECT ";
         b += queryUtils.getMinMaxSelection(params);
         b += queryUtils.getPreparedCondition(condition);
+        int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
+        if(limit != -1) {
+            b += " LIMIT " + limit;
+        }
         return b;
     }
     public String getPreparedInsertQuery(UsableMethods m) {

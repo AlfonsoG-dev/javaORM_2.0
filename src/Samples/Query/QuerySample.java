@@ -26,6 +26,18 @@ public class QuerySample {
             System.out.println(d);
         }
     }
+    public void selectWithLimit() {
+        UsersODM m = new UsersODM();
+        QueryDAO<UsersODM> dao = new QueryDAO<>(cursor, "users", m);
+        String[]
+            c = {""},
+            v = {""};
+        ParamValue condition = new ParamValue(c, v, "and", 2);
+        List<UsersODM> data = dao.preparedSelect(condition);
+        for(UsersODM u: data) {
+            System.out.println(u);
+        }
+    }
     public void selectInSample() {
         UsersODM m = new UsersODM();
         QueryDAO<UsersODM> dao = new QueryDAO<>(cursor, "users", m);
