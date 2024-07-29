@@ -5,6 +5,10 @@ public class ParamValue {
     private String[] values;
     private String type;
     private int limit;
+    /**
+     * has the same value as limit
+     */
+    private int offset;
     public ParamValue(String[] columns, String[] values, String type) {
         this.columns = columns;
         this.values = values;
@@ -15,6 +19,7 @@ public class ParamValue {
         this.values = values;
         this.type = type;
         this.limit = limit;
+        this.offset = limit;
     }
 
     public String[] getColumns() {
@@ -29,5 +34,8 @@ public class ParamValue {
     }
     public int getLimit() {
         return limit;
+    }
+    public int getOffset() {
+        return offset;
     }
 }

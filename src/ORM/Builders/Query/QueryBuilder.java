@@ -19,7 +19,7 @@ public class QueryBuilder {
         b += queryUtils.getPreparedCondition(condition);
         int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
         if(limit != -1) {
-            b += " LIMIT " + limit;
+            b += " LIMIT " + limit + " OFFSET " + limit;
         }
         return b;
     }
@@ -28,7 +28,7 @@ public class QueryBuilder {
         b += queryUtils.getPreparedCondition(condition);
         int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
         if(limit != -1) {
-            b += " LIMIT " + limit;
+            b += " LIMIT " + limit + " OFFSET " + limit;
         }
         return b;
     }
@@ -40,7 +40,7 @@ public class QueryBuilder {
         b += queryUtils.getInCondition(condition);
         int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
         if(limit != -1) {
-            b += " LIMIT " + limit;
+            b += " LIMIT " + limit + " OFFSET " + limit;
         }
         return b;
     }
@@ -52,7 +52,7 @@ public class QueryBuilder {
         b += queryUtils.getPreparedCondition(condition);
         int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
         if(limit != -1) {
-            b += " LIMIT " + limit;
+            b += " LIMIT " + limit + " OFFSET " + limit;
         }
         return b;
     }
@@ -67,7 +67,7 @@ public class QueryBuilder {
         b += queryUtils.getPatternCondition(condition);
         int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
         if(limit != -1) {
-            b += " LIMIT " + limit;
+            b += " LIMIT " + limit + " OFFSET " + limit;
         }
         return b;
     }
@@ -77,7 +77,7 @@ public class QueryBuilder {
         b += queryUtils.getPreparedCondition(condition);
         int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
         if(limit != -1) {
-            b += " LIMIT " + limit;
+            b += " LIMIT " + limit + " OFFSET " + limit;
         }
         return b;
     }
