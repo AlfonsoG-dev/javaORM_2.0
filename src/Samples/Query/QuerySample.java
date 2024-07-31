@@ -32,7 +32,11 @@ public class QuerySample {
         String[]
             c = {""},
             v = {""};
-        ParamValue condition = new ParamValue(c, v, "and", 2);
+
+        int
+            limit = 2,
+            offset = 0;
+        ParamValue condition = new ParamValue(c, v, "and", limit, offset);
         List<UsersODM> data = dao.preparedSelect(condition);
         for(UsersODM u: data) {
             System.out.println(u);

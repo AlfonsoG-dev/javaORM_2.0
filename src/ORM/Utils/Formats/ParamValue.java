@@ -14,12 +14,12 @@ public class ParamValue {
         this.values = values;
         this.type = type;
     }
-    public ParamValue(String[] columns, String[] values, String type, int limit) {
+    public ParamValue(String[] columns, String[] values, String type, int limit, int offset) {
         this.columns = columns;
         this.values = values;
         this.type = type;
         this.limit = limit;
-        this.offset = limit;
+        this.offset = offset;
     }
 
     public String[] getColumns() {

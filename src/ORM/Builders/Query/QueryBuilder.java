@@ -17,18 +17,22 @@ public class QueryBuilder {
         String b = "SELECT ";
         b += queryUtils.getCountSelection(columns);
         b += queryUtils.getPreparedCondition(condition);
-        int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
+        int
+            limit = condition.getLimit() > 0 ? condition.getLimit() : -1,
+            offset = condition.getOffset();
         if(limit != -1) {
-            b += " LIMIT " + limit + " OFFSET " + limit;
+            b += " LIMIT " + limit + " OFFSET " + offset;
         }
         return b;
     }
     public String getPreparedSelectQuery(ParamValue condition) {
         String b = "SELECT * FROM " + tbName;
         b += queryUtils.getPreparedCondition(condition);
-        int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
+        int
+            limit = condition.getLimit() > 0 ? condition.getLimit() : -1,
+            offset = condition.getOffset();
         if(limit != -1) {
-            b += " LIMIT " + limit + " OFFSET " + limit;
+            b += " LIMIT " + limit + " OFFSET " + offset;
         }
         return b;
     }
@@ -38,9 +42,11 @@ public class QueryBuilder {
         }
         String b = "SELECT " + columns + " FROM " + tbName;
         b += queryUtils.getInCondition(condition);
-        int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
+        int
+            limit = condition.getLimit() > 0 ? condition.getLimit() : -1,
+            offset = condition.getOffset();
         if(limit != -1) {
-            b += " LIMIT " + limit + " OFFSET " + limit;
+            b += " LIMIT " + limit + " OFFSET " + offset;
         }
         return b;
     }
@@ -50,9 +56,11 @@ public class QueryBuilder {
         }
         String b = "SELECT " + columns + " FROM " + tbName;
         b += queryUtils.getPreparedCondition(condition);
-        int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
+        int
+            limit = condition.getLimit() > 0 ? condition.getLimit() : -1,
+            offset = condition.getOffset();
         if(limit != -1) {
-            b += " LIMIT " + limit + " OFFSET " + limit;
+            b += " LIMIT " + limit + " OFFSET " + offset;
         }
         return b;
     }
@@ -65,9 +73,11 @@ public class QueryBuilder {
         }
         String b = "SELECT " + columns + " FROM " + tbName;
         b += queryUtils.getPatternCondition(condition);
-        int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
+        int
+            limit = condition.getLimit() > 0 ? condition.getLimit() : -1,
+            offset = condition.getOffset();
         if(limit != -1) {
-            b += " LIMIT " + limit + " OFFSET " + limit;
+            b += " LIMIT " + limit + " OFFSET " + offset;
         }
         return b;
     }
@@ -75,9 +85,11 @@ public class QueryBuilder {
         String b = "SELECT ";
         b += queryUtils.getMinMaxSelection(params);
         b += queryUtils.getPreparedCondition(condition);
-        int limit = condition.getLimit() > 0 ? condition.getLimit() : -1;
+        int
+            limit = condition.getLimit() > 0 ? condition.getLimit() : -1,
+            offset = condition.getOffset();
         if(limit != -1) {
-            b += " LIMIT " + limit + " OFFSET " + limit;
+            b += " LIMIT " + limit + " OFFSET " + offset;
         }
         return b;
     }
