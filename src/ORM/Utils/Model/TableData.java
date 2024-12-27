@@ -6,10 +6,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-/**
- * interface class that represents the table constraint and table type for implementation in model
- */
+
 public @interface TableData {
-    public String constraint();   
+    public String constraint();
     public String type();
 }
