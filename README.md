@@ -2,9 +2,11 @@
 
 - In this iteration i want to use java.reflect to get the instance data of a model.
 
->_ For this purpose is necessary to use 2 classes, one if used as a table model, the other one is used to perform CRUD operations and it needs to have in its name the ODM sentence at the end.
+> For this purpose is necessary to use 2 classes, one if used as a table model, the other one is used to perform CRUD operations and it needs to have in its name the ODM sentence at the end.
 
->>_ Also the model can be use for SELECT operation and the ODM class is used for INSERT, UPDATE, DELETE operations.
+>- Also the model can be use for SELECT operation and the ODM class is used for INSERT, UPDATE, DELETE operations.
+
+> See [First version](https://github.com/AlfonsoG-dev/javaMysqlORM) for a more simple approach.
 
 # References
 - [java.lang.reflect](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/package-summary.html)
@@ -25,7 +27,8 @@
 
 # Additional information.
 
->_ The following is a database model.
+- The following is a database model.
+
 ```java
 public class TestModel implements UsableMethods {
     @TableData(constraint = "not null unique primary key auto_increment", type = "int")
@@ -50,10 +53,10 @@ public class TestModel implements UsableMethods {
 - Its necessary to use the `UsableMethods` because it has the methods to initialize the database and table data.
 - And also it carries the instance data.
 
->_ For the `TestODM` declaration its only needed the database data no the instance data.
-- In order to get the instance data you need to create another class call `TestODM` that will supply the functionality.
+> For the `TestODM` declaration its only needed the database data no the instance data.
+>- In order to get the instance data you need to create another class call `TestODM` that will supply the functionality.
 
->_ The following is an instance class or model.
+- The following is an instance class or model.
 
 ```java
 public class TestODM extends TestModel {
@@ -80,11 +83,12 @@ public class TestODM extends TestModel {
 }
 ```
 
->- The `ODM` class must declare a *set* methods, this methods will be used to build the model using `java.reflect`.
->- This class must declare an empty constructor for the same purpose.
->_ Also in this class all *private* attributes will be ignored for the build process, only public members are allowed.
+- The `ODM` class must declare a *set* methods, this methods will be used to build the model using `java.reflect`.
+- This class must declare an empty constructor for the same purpose.
+_ Also in this class all *private* attributes will be ignored for the build process, only public members are allowed.
 
-- All of the SELECT type DAO operations returns a list of the generic class because the *UsableMethods* interface use *java.lang.reflect* to build the class instance from the *ResultSet* of the statement execution.
+> All of the SELECT type DAO operations returns a list of the generic class because the *UsableMethods* interface use *java.lang.reflect* to build the class instance from the *ResultSet* of the statement execution.
+
 ```java
 List<T> data = new ArrayList();
 T m = null;
@@ -108,12 +112,12 @@ while(rst.next()) {
 - [migrations](./src/Samples/Migration/MigrationSample.java)
 - [query](./src/Samples/Query/QuerySample.java)
 
->_ models:
+> models:
 
 - [primary_model](./src/Samples/Models/Primary/TestModel.java)
 - [foreign_model](./src/Samples/Models/Foreign/UsersModel.java)
 
->_ model instances:
+> model instances:
 
 - [ODM models_P](./src/Samples/Models/Primary/TestODM.java)
 - [ODM models_F](./src/Samples/Models/Foreign/UsersODM.java)
@@ -122,7 +126,7 @@ while(rst.next()) {
 
 - [password manager](https://github.com/AlfonsoG-dev/gestorPassword)
 
->_ the password manager project uses this *ORM* to perform CRUD operations with a MYSQL database.
+> the password manager project uses this *ORM* to perform CRUD operations with a MYSQL database.
 
 # Disclaimer
 
