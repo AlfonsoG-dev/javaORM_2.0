@@ -42,6 +42,20 @@ public class QuerySample {
             System.out.println(u);
         }
     }
+    public void selectWithoutLimit() {
+        UsersODM m = new UsersODM();
+        QueryDAO<UsersODM> dao = new QueryDAO<>(cursor, "users", m);
+        String[]
+            c = {"rol"},
+            v = {"admin"};
+        int limit = -1;
+        // if limit -1 it doesn't count
+        ParamValue condition = new ParamValue(c, v, "and", limit, limit);
+        List<UsersODM> data = dao.preparedSelect(condition);
+        for(UsersODM u: data) {
+            System.out.println(u);
+        }
+    }
     public void selectInSample() {
         UsersODM m = new UsersODM();
         QueryDAO<UsersODM> dao = new QueryDAO<>(cursor, "users", m);
