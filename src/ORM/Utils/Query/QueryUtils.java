@@ -31,12 +31,18 @@ public class QueryUtils {
         }
         return b;
     }
+    /**
+     * @param condition of {ParamValue}: if empty values returns empty string
+     */
     public String getPreparedCondition(ParamValue condition) {
         String
             t = "",
             b = " WHERE ";
         if(!condition.getType().isEmpty()) {
             t = condition.getType();
+        }
+        if(condition.getColumns().length == 0) {
+            return "";
         }
         String[] columns = condition.getColumns();
         for(String c: columns) {
@@ -75,6 +81,9 @@ public class QueryUtils {
         if(!condition.getType().isEmpty()) {
             t = condition.getType();
         }
+        if(condition.getColumns().length == 0) {
+            return "";
+        }
         String[]
             c = condition.getColumns(),
             v = condition.getValues();
@@ -99,6 +108,9 @@ public class QueryUtils {
             b = " WHERE ";
         if(!condition.getType().isEmpty()) {
             t = condition.getType();
+        }
+        if(condition.getColumns().length == 0) {
+            return "";
         }
         String[]
             c = condition.getColumns(),
@@ -146,6 +158,9 @@ public class QueryUtils {
         String[] 
             c = params.getColumns(),
             v = params.getValues();
+        if(c.length == 0) {
+            return "";
+        }
         for(int i=0; i<c.length; ++i) {
             if(c[i].equals("min")) {
                 b += "MIN(" + v[i] +") AS min_" + v[i] + ", ";
@@ -155,8 +170,14 @@ public class QueryUtils {
         }
         return clean(b, 2);
     }
+    /**
+     * @param columns givin the column to count, default COUNT(*) as count_all
+     */
     public String getCountSelection(String columns) {
         String b = "";
+        if(columns.isEmpty()) {
+            return "COUNT(*) AS count_all";
+        }
         String[] c = columns.split(",");
         for(int i=0; i<c.length; ++i) {
             b += "COUNT(" + c[i] +") AS count_" + c[i] + ", ";
@@ -164,10 +185,11 @@ public class QueryUtils {
         return clean(b, 2);
     }
     public String[] getModelData(UsableMethods m) {
+        String instanceData = m.getInstanceData();
         String[]
             returns = new String[2],
-            types = modelUtils.getTypes(m.getInstanceData(), true).split(","),
-            columns = modelUtils.getColumns(m.getInstanceData(), true).split(",");
+            types = modelUtils.getTypes(instanceData, true).split(","),
+            columns = modelUtils.getColumns(instanceData, true).split(",");
         String 
             t = "",
             c = "";
