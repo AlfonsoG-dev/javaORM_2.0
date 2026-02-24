@@ -1,6 +1,6 @@
-$srcClases = ".\src\ORM\Builders\Migration\*.java .\src\ORM\Builders\Query\*.java .\src\ORM\DbConnection\*.java .\src\ORM\DbConnection\DAO\*.java .\src\ORM\DbConnection\Execution\*.java .\src\ORM\Utils\Formats\*.java .\src\ORM\Utils\Model\*.java .\src\ORM\Utils\Query\*.java .\src\Samples\Migration\*.java .\src\Samples\Models\Foreign\*.java .\src\Samples\Models\Primary\*.java .\src\Samples\Query\*.java "
+$srcClases = ".\src\orm\builders\migration\*.java .\src\orm\builders\querys\*.java .\src\orm\connection\*.java .\src\orm\connection\dao\*.java .\src\orm\connection\execution\*.java .\src\orm\utils\formats\*.java .\src\orm\utils\model\*.java .\src\orm\utils\query\*.java .\src\samples\migration\*.java .\src\samples\models\foreign\*.java .\src\samples\models\primary\*.java .\src\samples\query\*.java "
 $libFiles = ".\lib\mysql-connector-j-9.3.0\mysql-connector-j-9.3.0.jar;"
 $compile = "javac -Werror -Xlint:all -d .\bin\ -cp '$libFiles' $srcClases"
-$createJar = "jar -cfm javaORM_2.0.jar Manifesto.txt -C .\bin\ . -C .\extractionFiles\mysql-connector-j-9.3.0\ ."
+$createJar = "jar -cfm App.jar Manifesto.txt -C .\bin\ . -C .\extractionFiles\mysql-connector-j-9.3.0\ ."
 $runCommand = "$compile" + " && " + "$createJar" 
 Invoke-Expression $runCommand 
