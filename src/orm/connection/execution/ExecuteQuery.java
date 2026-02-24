@@ -15,6 +15,7 @@ import orm.utils.formats.ParamValue;
 import orm.utils.formats.UsableMethods;
 import orm.utils.model.ModelUtils;
 
+// TODO: verify the try-resource changes
 public class ExecuteQuery {
     private Connection cursor;
     private QueryBuilder builder;

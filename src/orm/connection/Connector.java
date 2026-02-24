@@ -13,7 +13,7 @@ public class Connector {
     public Connection mysqlConnection() {
         Connection c = null;
         try {
-            Class.forName(config.DRIVER);
+            Class.forName(DbConfig.DRIVER);
             c = DriverManager.getConnection(
                     config.getURL(),
                     config.getUser(),
