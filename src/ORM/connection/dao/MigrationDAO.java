@@ -1,440 +1,196 @@
 package orm.connection.dao;
 
+import java.io.Console;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.Statement;
 
 import orm.connection.execution.ExecuteMigration;
 import orm.utils.formats.ParamValue;
 import orm.utils.formats.UsableMethods;
 
+// TODO: verify the changes of the ResultSet being in a try-resource enclosure and the Statement being in the execute class.
 public class MigrationDAO {
+
+    private static final Console console = System.console();
+    private static final String CONSOLE_FORMAT = "[%s] %s%n";
+    private static final String[] LOG_LEVEL = {
+        "Info",
+        "Error",
+        "Warning"
+    };
+
     private ExecuteMigration execute;
+
     public MigrationDAO(Connection cursor, String tableName) {
         execute = new ExecuteMigration(cursor, tableName);
     }
     public boolean createDatabase(String database) {
         boolean isCreated = false;
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.createDatabaseQuery(database, stm).getGeneratedKeys();
+        try(ResultSet rst = execute.createDatabaseQuery(database).getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isCreated = true;
             } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute create database query"
-                );
+                console.printf(CONSOLE_FORMAT,
+                        LOG_LEVEL[1], "something happen while trying to execute create database query");
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return isCreated;
     }
     public boolean createTable(UsableMethods m, String type) {
         boolean isCreated = false;
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.createTableQuery(m, type, stm).getGeneratedKeys();
+        try(ResultSet rst = execute.createTableQuery(m, type).getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isCreated = true;
             } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute create table query"
-                );
+                console.printf(CONSOLE_FORMAT,
+                        LOG_LEVEL[1], "something happen while trying to execute create table query");
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return isCreated;
     }
     public boolean createIndex(boolean unique, String columns) {
         boolean isCreated = false;
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.createIndexQuery(unique, columns, stm).getGeneratedKeys();
+        try(ResultSet rst = execute.createIndexQuery(unique, columns).getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isCreated = true;
             } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute create index query"
-                );
+                console.printf(CONSOLE_FORMAT,
+                        LOG_LEVEL[1], "something happen while trying to execute create index query");
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return isCreated;
     }
     public boolean removeIndex(String column) {
         boolean isRemoved = false;
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.removeIndexQuery(column, stm).getGeneratedKeys();
+        try(ResultSet rst = execute.removeIndexQuery(column).getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute remove index query"
-                );
+                console.printf(CONSOLE_FORMAT, 
+                        LOG_LEVEL[1], "something happen while trying to execute remove index query");
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return isRemoved;
     }
     public boolean renameColumn(UsableMethods model) {
         boolean isRenamed = false;
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.renameColumnQuery(model, stm).getGeneratedKeys();
+        try(ResultSet rst = execute.renameColumnQuery(model).getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRenamed = true;
             } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute rename column query"
-                );
+                console.printf(CONSOLE_FORMAT,
+                        LOG_LEVEL[1], "something happen while trying to execute rename column query");
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return isRenamed;
     }
-    public boolean addColumn(String primaryModel, String[] foreigModels, String[] foreignTables, 
-            boolean includeKeys) {
+    public boolean addColumn(String primaryModel, String[] foreigModels, String[] foreignTables, boolean includeKeys) {
         boolean isAdded = false;
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.addColumnQuery(
-                    primaryModel, foreigModels, foreignTables, includeKeys, stm
-            ).getGeneratedKeys();
+        try(ResultSet rst = execute.addColumnQuery(primaryModel, foreigModels, foreignTables, includeKeys).getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isAdded = true;
             } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute add column query"
-                );
+                console.printf(CONSOLE_FORMAT,
+                        LOG_LEVEL[1], "something happen while trying to execute add column query");
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return isAdded;
     }
     public boolean removeColumn(UsableMethods model) {
         boolean isRemoved = false;
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.removeColumnQuery(model, stm).getGeneratedKeys();
+        try(ResultSet rst = execute.removeColumnQuery(model).getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute remove column query"
-                );
+                console.printf(CONSOLE_FORMAT,
+                        LOG_LEVEL[1], "something happen while trying to execute remove column query");
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return isRemoved;
     }
 
     public boolean modifyType(UsableMethods model) {
         boolean isRemoved = false;
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.modifyTypeQuery(model, stm).getGeneratedKeys();
+        try(ResultSet rst = execute.modifyTypeQuery(model).getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute modify type query"
-                );
+                console.printf(CONSOLE_FORMAT,
+                        LOG_LEVEL[1], "something happen while trying to execute modify type query");
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return isRemoved;
     }
     public boolean addCheckConstraint(ParamValue params) {
         boolean isRemoved = false;
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.addCheckConstraintQuery(params, stm).getGeneratedKeys();
+        try(ResultSet rst = execute.addCheckConstraintQuery(params).getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute add check constraint query"
-                );
+                console.printf(CONSOLE_FORMAT,
+                        LOG_LEVEL[1], "something happen while trying to execute add check constraint query");
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return isRemoved;
     }
     public boolean addDefaultConstraint(ParamValue params) {
         boolean isRemoved = false;
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.addDefaultConstraintQuery(params, stm).getGeneratedKeys();
+        try(ResultSet rst = execute.addDefaultConstraintQuery(params).getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute add default constraint query"
-                );
+                console.printf(CONSOLE_FORMAT,
+                        LOG_LEVEL[1], "something happen while trying to execute add default constraint query");
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return isRemoved;
     }
     public boolean removeCheckConstraint(String name) {
         boolean isRemoved = false;
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.removeCheckConstraintQuery(name, stm).getGeneratedKeys();
+        try(ResultSet rst = execute.removeCheckConstraintQuery(name).getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute remove check constraint query"
-                );
+                console.printf(CONSOLE_FORMAT,
+                        LOG_LEVEL[1], "something happen while trying to execute remove check constraint query");
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return isRemoved;
     }
     
     public boolean removeDefaultConstraint(String name) {
         boolean isRemoved = false;
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.removeDefaultConstraintQuery(name, stm).getGeneratedKeys();
+        try(ResultSet rst = execute.removeDefaultConstraintQuery(name).getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute remove default constraint query"
-                );
+                console.printf(CONSOLE_FORMAT,
+                        LOG_LEVEL[1], "something happen while trying to execute remove default constraint query");
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return isRemoved;
     }

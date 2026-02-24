@@ -16,81 +16,129 @@ public class ExecuteMigration {
         builder = new MigrationBuilder(tableName, cursor);
     }
 
-    public Statement createDatabaseQuery(String database, Statement stm) throws SQLException {
+    public Statement createDatabaseQuery(String database) {
         String sql = builder.getCreateDatabaseQuery(database);
-        stm = cursor.createStatement();
-        stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-        return stm;
+        try (Statement stm = cursor.createStatement()) {
+            stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            return stm;
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public Statement createTableQuery(UsableMethods m, String type, Statement stm) throws SQLException {
+    public Statement createTableQuery(UsableMethods m, String type) {
         String sql = builder.getCreateTableQuery(m, type);
-        stm = cursor.createStatement();
-        stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-        return stm; 
+        try (Statement stm = cursor.createStatement()) {
+            stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            return stm; 
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public Statement createIndexQuery(boolean unique, String columns, Statement stm) throws SQLException {
+    public Statement createIndexQuery(boolean unique, String columns) {
         String sql = builder.getCreateIndexQuery(unique, columns);
-        stm = cursor.createStatement();
-        stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-        return stm;
+        try (Statement stm = cursor.createStatement()) {
+            stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            return stm;
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public Statement removeIndexQuery(String column, Statement stm) throws SQLException {
+    public Statement removeIndexQuery(String column) {
         String sql = builder.getRemoveIndexQuery(column);
-        stm = cursor.createStatement();
-        stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-        return stm; 
+        try (Statement stm = cursor.createStatement()) {
+            stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            return stm; 
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public Statement renameColumnQuery(UsableMethods model, Statement stm) throws SQLException {
+    public Statement renameColumnQuery(UsableMethods model) {
         String sql = builder.getRenameColumnQuery(model.initModel());
-        stm = cursor.createStatement();
-        stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-        return stm;
+        try (Statement stm = cursor.createStatement()) {
+            stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            return stm;
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public Statement addColumnQuery(String pm, String[] fm, String[] ft, boolean ik, Statement stm)
-            throws SQLException {
+    public Statement addColumnQuery(String pm, String[] fm, String[] ft, boolean ik) {
         String sql = builder.getAddColumnQuery(pm, fm, ft, ik);
-        stm = cursor.createStatement();
-        stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-        return stm; 
+        try (Statement stm = cursor.createStatement()) {
+            stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            return stm; 
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public Statement removeColumnQuery(UsableMethods model, Statement stm) throws SQLException {
+    public Statement removeColumnQuery(UsableMethods model) {
         String sql = builder.getRemoveColumnQuery(model.initModel());
-        stm = cursor.createStatement();
-        stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-        return stm; 
+        try (Statement stm = cursor.createStatement()) {
+            stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            return stm; 
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public Statement modifyTypeQuery(UsableMethods model, Statement stm) throws SQLException {
+    public Statement modifyTypeQuery(UsableMethods model) {
         String sql = builder.getModifyTypeQuery(model.initModel());
-        stm = cursor.createStatement();
-        stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-        return stm;
+        try (Statement stm = cursor.createStatement()) {
+            stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            return stm;
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public Statement addCheckConstraintQuery(ParamValue params, Statement stm) throws SQLException {
+    public Statement addCheckConstraintQuery(ParamValue params) {
         String sql = builder.getAddChekConstraintQuery(params);
-        stm = cursor.createStatement();
-        stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-        return stm; 
+        try (Statement stm = cursor.createStatement()) {
+            stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            return stm; 
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public Statement addDefaultConstraintQuery(ParamValue params, Statement stm) throws SQLException {
+    public Statement addDefaultConstraintQuery(ParamValue params){
         String sql = builder.getAddDefaultConstraintQuery(params);
-        stm = cursor.createStatement();
-        stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-        return stm;
+        try (Statement stm = cursor.createStatement()) {
+            stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            return stm;
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
-    public Statement removeCheckConstraintQuery(String name, Statement stm) throws SQLException {
+    public Statement removeCheckConstraintQuery(String name){
         String sql =  builder.getDeleteCheckConstraintQuery(name);
-        stm = cursor.createStatement();
-        stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-        return stm; 
+        try (Statement stm = cursor.createStatement()) {
+            stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            return stm; 
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public Statement removeDefaultConstraintQuery(String name, Statement stm) throws SQLException {
+    public Statement removeDefaultConstraintQuery(String name){
         String sql = builder.getDeleteDefaultConstraintQuery(name);
-        stm = cursor.createStatement();
-        stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-        return stm; 
+        try (Statement stm = cursor.createStatement()) {
+            stm.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            return stm; 
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
