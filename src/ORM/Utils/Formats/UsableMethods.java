@@ -40,9 +40,8 @@ public interface UsableMethods {
             while(rst.next()) {
                 m = (T) this.getClass().getConstructor().newInstance();
                 for(int i=1; i<=length; ++i) {
-                    String 
-                        columnName = rst.getMetaData().getColumnName(i),
-                        value = rst.getString(i);
+                    String columnName = rst.getMetaData().getColumnName(i);
+                    String value = rst.getString(i);
                     buildTest(columnName, value, m);
                 }
                 data.add(m);

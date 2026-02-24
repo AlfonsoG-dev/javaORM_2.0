@@ -6,6 +6,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class ModelMetadata {
+    private static final String CONSOLE_FORMAT = "%s%n";
+
+    private static final String[] CONSTRAINT_FIELD = {" and "};
+
     /**
      * model or table name
      */
@@ -34,19 +38,19 @@ public class ModelMetadata {
      * @return list of class fields.
      */
     private Field[] getFields() {
-        Field[] myFields = myClass.getDeclaredFields();
-        return myFields;
+        return myClass.getDeclaredFields();
     }
     /**
      * model columns are the attributes names
      * @return columns or attributes names
      */
     private String getColumns() {
-        StringBuffer rest = new StringBuffer();
+        StringBuilder rest = new StringBuilder();
         Field[] myFields = getFields();
         if(myFields.length > 0) {
             for(Field f: myFields) {
-                rest.append(f.getName() + ", ");
+                rest.append(f.getName());
+                rest.append(", ");
             }
         }
         return rest.substring(0, rest.length()-2);
@@ -67,10 +71,11 @@ public class ModelMetadata {
         return rest;
     }
     private String getAnnotationConstraint() {
-        StringBuffer constraint = new StringBuffer();
+        StringBuilder constraint = new StringBuilder();
         ArrayList<Annotation[]> misAnnotations = getAnnotations();
         for(Annotation[] m: misAnnotations) {
-            constraint.append(m[0] + " and ");
+            constraint.append(m[0]);
+            constraint.append(CONSTRAINT_FIELD[0]);
         }
         return constraint.substring(0, constraint.length()-5);
     }
@@ -79,8 +84,8 @@ public class ModelMetadata {
      */
     private String getColumConstraint() {
         try {
-            String[] myConstraint = getAnnotationConstraint().split(" and ");
-            StringBuffer data = new StringBuffer();
+            String[] myConstraint = getAnnotationConstraint().split(CONSTRAINT_FIELD[0]);
+            StringBuilder data = new StringBuilder();
             for(String c: myConstraint) {
                 String[] f = c.split(".constraint");
                 for(String i: f) {
@@ -90,13 +95,19 @@ public class ModelMetadata {
                     }
                 }
             }
-            String 
-                restData  = data.toString().replace("=", ", "),
-                cleanData = restData.substring(2, restData.length());
-            return cleanData;
+            String restData  = data.toString().replace("=", ", ");
+            return restData.substring(2, restData.length());
         } catch(Exception e) {
-            System.err.println(e);
+            System.console().printf(CONSOLE_FORMAT, e);
             return "";
+        }
+    }
+    private void appendType(String[] constraintValues, StringBuilder data) {
+        for(String t: constraintValues) {
+            String[] mt = t.split("type=");
+            if(mt.length == 2 && (mt[1].startsWith("\"") || mt[1].endsWith(")"))) {
+                data.append(mt[1]);
+            }
         }
     }
     /**
@@ -104,25 +115,16 @@ public class ModelMetadata {
      */
     private String getColumnType() {
         try {
-            String[] myConstraint = getAnnotationConstraint().split(" and ");
-            StringBuffer data = new StringBuffer();
+            String[] myConstraint = getAnnotationConstraint().split(CONSTRAINT_FIELD[0]);
+            StringBuilder data = new StringBuilder();
             for(String c: myConstraint) {
                 String[] f = c.split(".constraint");
                 for(String i: f) {
-                    String[] ci = i.split(", ");
-                    for(String t: ci) {
-                        String[] mt = t.split("type=");
-                        if(mt.length == 2) {
-                            if(mt[1].startsWith("\"") || mt[1].endsWith(")")) {
-                                data.append(mt[1]);
-                            }
-                        }
-                    }
+                    appendType(i.split(", "), data);
                 }
             }
-            String 
-                restData  = data.toString().replace("\")", "\", "),
-                cleanData = "";
+            String restData  = data.toString().replace("\")", "\", ");
+            String cleanData = "";
             if((restData.length()-2) > 0) {
                 cleanData = restData.substring(0, restData.length()-2);
             }
@@ -141,13 +143,11 @@ public class ModelMetadata {
                 if(t.invoke(instance) != null) {
                     m = t;
                 }
-            } else if(returnType == int.class) {
-                if((int) t.invoke(instance) > 0) {
-                    m = t;
-                }
+            } else if(returnType == int.class && ((int) t.invoke(instance) > 0)) {
+                m = t;
             }
         } catch(Exception e) {
-            //
+            System.console().printf(CONSOLE_FORMAT, e.getLocalizedMessage());
         }
         return m;
     }
@@ -162,7 +162,7 @@ public class ModelMetadata {
         return isValid;
     }
     public<T> String getInstanceData(T instance) {
-        String b = "";
+        StringBuilder b = new StringBuilder();
         Field[] fields = getFields();
         try {
             for(Field f: fields) {
@@ -170,30 +170,35 @@ public class ModelMetadata {
                 String methodName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
                 Method m = validateValue(methodName, instance);
                 if(validateName(methodName) && m != null) {
-                    b += fieldName + ": " + m.invoke(instance) + "\n";
+                    b.append(fieldName);
+                    b.append(": ");
+                    b.append(m.invoke(instance));
+                    b.append("\n");
                 }
             }
         } catch(Exception e) {
             e.printStackTrace();
         }
-        return b;
+        return b.toString();
     }
     /**
      * model column: type format.
      */
     public String getProperties() {
-        StringBuffer build = new StringBuffer();
-        String[] 
-            columns    = getColumns().split(", "),
-            types      = getColumnType().split(", "),
-            constraint = getColumConstraint().split(", ");
+        StringBuilder b = new StringBuilder();
+        String[] columns = getColumns().split(", ");
+        String[] types = getColumnType().split(", ");
+        String[] constraint = getColumConstraint().split(", ");
         for(int i=0; i<columns.length; ++i) {
-            if(constraint[i] != "") {
-                build.append(
-                        columns[i] + ": " + types[i] + " " + constraint[i] + "\n"
-                );
+            if(constraint[i].equals("")) {
+                b.append(columns[i]);
+                b.append(": ");
+                b.append(types[i]);
+                b.append(" ");
+                b.append(constraint[i]);
+                b.append("\n");
             }
         }
-        return build.toString().replace("\"", "");
+        return b.toString().replace("\"", "");
     }
 }

@@ -1,7 +1,7 @@
 package orm.utils.formats;
 
 public class DbConfig {
-    public final String DRIVER = "com.mysql.cj.jdbc.Driver";
+    public static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private String host;
     private String user;
     private int port;
