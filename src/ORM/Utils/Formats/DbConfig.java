@@ -1,4 +1,4 @@
-package ORM.Utils.Formats;
+package orm.utils.formats;
 
 public class DbConfig {
     public final String DRIVER = "com.mysql.cj.jdbc.Driver";

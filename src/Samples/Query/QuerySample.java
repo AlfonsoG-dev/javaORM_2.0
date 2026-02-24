@@ -1,13 +1,13 @@
-package Samples.Query;
+package samples.query;
 
 import java.sql.Connection;
 import java.util.List;
 
-import ORM.DbConnection.DAO.QueryDAO;
-import ORM.Utils.Formats.ParamValue;
-import ORM.Utils.Formats.UsableMethods;
-import Samples.Models.Foreign.UsersODM;
-import Samples.Models.Primary.TestODM;
+import orm.connection.dao.QueryDAO;
+import orm.utils.formats.ParamValue;
+import orm.utils.formats.UsableMethods;
+import samples.models.foreign.UsersODM;
+import samples.models.primary.TestODM;
 
 public class QuerySample {
     private Connection cursor;

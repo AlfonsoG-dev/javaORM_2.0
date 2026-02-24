@@ -1,12 +1,12 @@
-package Samples.Migration;
+package samples.migration;
 
 import java.sql.Connection;
 
-import ORM.DbConnection.DAO.MigrationDAO;
-import ORM.Utils.Formats.ParamValue;
+import orm.connection.dao.MigrationDAO;
+import orm.utils.formats.ParamValue;
 
-import Samples.Models.Primary.TestModel;
-import Samples.Models.Foreign.UsersModel;
+import samples.models.primary.TestModel;
+import samples.models.foreign.UsersModel;
 
 public class MigrationSample {
     private MigrationDAO dao;

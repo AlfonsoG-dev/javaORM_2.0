@@ -1,8 +1,8 @@
-package ORM.Utils.Query;
+package orm.utils.query;
 
-import ORM.Utils.Formats.ParamValue;
-import ORM.Utils.Formats.UsableMethods;
-import ORM.Utils.Model.ModelUtils;
+import orm.utils.formats.ParamValue;
+import orm.utils.formats.UsableMethods;
+import orm.utils.model.ModelUtils;
 
 public class QueryUtils {
     private ModelUtils modelUtils;

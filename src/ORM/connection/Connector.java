@@ -1,9 +1,9 @@
-package ORM.DbConnection;
+package orm.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-import ORM.Utils.Formats.DbConfig;
+import orm.utils.formats.DbConfig;
 
 public class Connector {
     private DbConfig config;

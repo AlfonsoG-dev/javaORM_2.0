@@ -1,11 +1,11 @@
-package ORM.Utils.Formats;
+package orm.utils.formats;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import ORM.Utils.Model.ModelMetadata;
+import orm.utils.model.ModelMetadata;
 
 
 @SuppressWarnings("unchecked")

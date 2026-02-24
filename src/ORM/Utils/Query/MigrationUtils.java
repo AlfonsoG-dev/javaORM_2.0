@@ -1,11 +1,11 @@
-package ORM.Utils.Query;
+package orm.utils.query;
 
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.Connection;
 
 
-import ORM.Utils.Model.ModelUtils;
+import orm.utils.model.ModelUtils;
 
 import java.util.List;
 import java.util.Arrays;

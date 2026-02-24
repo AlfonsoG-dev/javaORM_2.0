@@ -1,4 +1,5 @@
-package ORM.Utils.Model;
+package orm.utils.model;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

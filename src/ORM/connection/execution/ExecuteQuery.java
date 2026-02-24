@@ -1,4 +1,4 @@
-package ORM.DbConnection.Execution;
+package orm.connection.execution;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,12 +8,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import ORM.Builders.Query.QueryBuilder;
+import orm.builders.querys.QueryBuilder;
 
-import ORM.Utils.Formats.ParamValue;
-import ORM.Utils.Formats.UsableMethods;
-
-import ORM.Utils.Model.ModelUtils;
+import orm.utils.formats.ParamValue;
+import orm.utils.formats.UsableMethods;
+import orm.utils.model.ModelUtils;
 
 public class ExecuteQuery {
     private Connection cursor;

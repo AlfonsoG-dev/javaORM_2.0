@@ -1,12 +1,12 @@
-package ORM.DbConnection.Execution;
+package orm.connection.execution;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import ORM.Builders.Migration.MigrationBuilder;
-import ORM.Utils.Formats.ParamValue;
-import ORM.Utils.Formats.UsableMethods;
+import orm.builders.migration.MigrationBuilder;
+import orm.utils.formats.ParamValue;
+import orm.utils.formats.UsableMethods;
 
 public class ExecuteMigration {
     private MigrationBuilder builder;

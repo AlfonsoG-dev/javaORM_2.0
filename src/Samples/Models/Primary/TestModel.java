@@ -1,7 +1,7 @@
-package Samples.Models.Primary;
+package samples.models.primary;
 
-import ORM.Utils.Formats.UsableMethods;
-import ORM.Utils.Model.TableData;
+import orm.utils.formats.UsableMethods;
+import orm.utils.model.TableData;
 
 public class TestModel implements UsableMethods {
 

@@ -1,4 +1,4 @@
-package ORM.Utils.Model;
+package orm.utils.model;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ORM.DbConnection.DAO;
+package orm.connection.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,9 +7,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import ORM.DbConnection.Execution.ExecuteQuery;
-import ORM.Utils.Formats.ParamValue;
-import ORM.Utils.Formats.UsableMethods;
+import orm.connection.execution.ExecuteQuery;
+import orm.utils.formats.ParamValue;
+import orm.utils.formats.UsableMethods;
 
 public class QueryDAO<T> {
     private Connection cursor;

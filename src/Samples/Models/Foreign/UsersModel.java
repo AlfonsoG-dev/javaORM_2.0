@@ -1,7 +1,7 @@
-package Samples.Models.Foreign;
+package samples.models.foreign;
 
-import ORM.Utils.Formats.UsableMethods;
-import ORM.Utils.Model.TableData;
+import orm.utils.formats.UsableMethods;
+import orm.utils.model.TableData;
 
 public class UsersModel implements UsableMethods {
     @TableData(constraint = "not null unique primary key auto_increment", type = "int")

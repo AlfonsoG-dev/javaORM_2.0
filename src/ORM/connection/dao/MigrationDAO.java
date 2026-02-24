@@ -1,12 +1,12 @@
-package ORM.DbConnection.DAO;
+package orm.connection.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import ORM.DbConnection.Execution.ExecuteMigration;
-import ORM.Utils.Formats.ParamValue;
-import ORM.Utils.Formats.UsableMethods;
+import orm.connection.execution.ExecuteMigration;
+import orm.utils.formats.ParamValue;
+import orm.utils.formats.UsableMethods;
 
 public class MigrationDAO {
     private ExecuteMigration execute;

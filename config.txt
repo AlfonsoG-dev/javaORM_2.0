@@ -1,0 +1,8 @@
+Root-Path: src
+Source-Path: src\ORM
+Class-Path: bin
+Main-Class: 
+Test-Path: 
+Test-Class: 
+Libraries: include
+Compile-Flags: -WError -Xlint:all -Xdiags:verbose -g

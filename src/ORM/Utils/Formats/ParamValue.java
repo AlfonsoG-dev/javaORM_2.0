@@ -1,4 +1,4 @@
-package ORM.Utils.Formats;
+package orm.utils.formats;
 
 public class ParamValue {
     private String[] columns;

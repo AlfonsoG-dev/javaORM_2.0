@@ -1,4 +1,4 @@
-package Samples.Models.Foreign;
+package samples.models.foreign;
 
 public class UsersODM extends UsersModel {
     public String description;
