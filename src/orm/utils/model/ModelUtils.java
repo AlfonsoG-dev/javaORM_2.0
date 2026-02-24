@@ -15,32 +15,35 @@ public class ModelUtils {
     }
     public String getTypes(String model, boolean includeKeys) {
         String[] data = model.split("\n");
-        String ts = "";
+        StringBuilder ts = new StringBuilder();
         if(!includeKeys) {
             for(int i=0; i<data.length; ++i) {
                 String type = data[i].split(":", 2)[i].trim();
                 if(!type.isEmpty()) {
-                    ts += "'" + type + "',";
+                    ts.append("'");
+                    ts.append(type);
+                    ts.append("',");
                 }
             }
         } else {
             for(int i=0; i<data.length; ++i) {
                 String[] spaces = data[i].split(":", 2);
-                if(spaces.length >= 1) {
+                if(spaces.length > 1) {
                     String type = spaces[1].trim();
                     if(!type.isEmpty()) {
-                        ts += "'" + type + "',";
+                        ts.append("'");
+                        ts.append(type);
+                        ts.append("',");
                     }
                 }
             }
         }
-        return clean(ts, 1);
+        return clean(ts.toString(), 1);
     }
     public String getColumns(String model, boolean includeKeys) {
         String[] data = model.split("\n");
-        String 
-            colName = "",
-            modelCol = "";
+        String colName = "";
+        String modelCol = "";
         for(int i=0; i<data.length; ++i) {
             String column = data[i].split(":", 2)[0].trim();
             if(!column.isEmpty()) {

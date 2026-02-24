@@ -1,5 +1,5 @@
 Root-Path: src
-Source-Path: src\ORM
+Source-Path: src\orm
 Class-Path: bin
 Main-Class: 
 Test-Path: 

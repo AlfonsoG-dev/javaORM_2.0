@@ -190,7 +190,7 @@ public class ModelMetadata {
         String[] types = getColumnType().split(", ");
         String[] constraint = getColumConstraint().split(", ");
         for(int i=0; i<columns.length; ++i) {
-            if(constraint[i].equals("")) {
+            if(!constraint[i].equals("")) {
                 b.append(columns[i]);
                 b.append(": ");
                 b.append(types[i]);

@@ -51,7 +51,7 @@ public class MigrationBuilder {
             value.append(t[i].replace("'", ""));
             value.append(", ");
         }
-        String v = value.substring(0, value.length()-2);
+        String v = value.toString().substring(0, value.length()-2);
         String sql = "";
         if (type.equals("n")) {
             sql = "CREATE TABLE IF NOT EXISTS " + tableName + v + ")";
