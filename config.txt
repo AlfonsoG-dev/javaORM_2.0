@@ -5,4 +5,4 @@ Main-Class:
 Test-Path: 
 Test-Class: 
 Libraries: include
-Compile-Flags: -WError -Xlint:all -Xdiags:verbose -g
+Compile-Flags: -Werror -Xlint:all -Xdiags:verbose -g

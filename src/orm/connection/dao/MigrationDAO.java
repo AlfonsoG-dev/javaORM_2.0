@@ -3,12 +3,12 @@ package orm.connection.dao;
 import java.io.Console;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 import orm.connection.execution.ExecuteMigration;
 import orm.utils.formats.ParamValue;
 import orm.utils.formats.UsableMethods;
 
-// TODO: verify the changes of the ResultSet being in a try-resource enclosure and the Statement being in the execute class.
 public class MigrationDAO {
 
     private static final Console console = System.console();
@@ -26,7 +26,7 @@ public class MigrationDAO {
     }
     public boolean createDatabase(String database) {
         boolean isCreated = false;
-        try(ResultSet rst = execute.createDatabaseQuery(database).getGeneratedKeys()) {
+        try(Statement stm = execute.createDatabaseQuery(database); ResultSet rst = stm.getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isCreated = true;
             } else {
@@ -40,7 +40,7 @@ public class MigrationDAO {
     }
     public boolean createTable(UsableMethods m, String type) {
         boolean isCreated = false;
-        try(ResultSet rst = execute.createTableQuery(m, type).getGeneratedKeys()) {
+        try(Statement stm = execute.createTableQuery(m, type); ResultSet rst = stm.getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isCreated = true;
             } else {
@@ -54,7 +54,7 @@ public class MigrationDAO {
     }
     public boolean createIndex(boolean unique, String columns) {
         boolean isCreated = false;
-        try(ResultSet rst = execute.createIndexQuery(unique, columns).getGeneratedKeys()) {
+        try(Statement stm = execute.createIndexQuery(unique, columns); ResultSet rst = stm.getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isCreated = true;
             } else {
@@ -68,7 +68,7 @@ public class MigrationDAO {
     }
     public boolean removeIndex(String column) {
         boolean isRemoved = false;
-        try(ResultSet rst = execute.removeIndexQuery(column).getGeneratedKeys()) {
+        try(Statement stm = execute.removeIndexQuery(column); ResultSet rst = stm.getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
@@ -82,7 +82,7 @@ public class MigrationDAO {
     }
     public boolean renameColumn(UsableMethods model) {
         boolean isRenamed = false;
-        try(ResultSet rst = execute.renameColumnQuery(model).getGeneratedKeys()) {
+        try(Statement stm = execute.renameColumnQuery(model); ResultSet rst = stm.getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRenamed = true;
             } else {
@@ -96,7 +96,8 @@ public class MigrationDAO {
     }
     public boolean addColumn(String primaryModel, String[] foreigModels, String[] foreignTables, boolean includeKeys) {
         boolean isAdded = false;
-        try(ResultSet rst = execute.addColumnQuery(primaryModel, foreigModels, foreignTables, includeKeys).getGeneratedKeys()) {
+        try(Statement stm = execute.addColumnQuery(primaryModel, foreigModels, foreignTables, includeKeys);
+                ResultSet rst = stm.getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isAdded = true;
             } else {
@@ -110,7 +111,7 @@ public class MigrationDAO {
     }
     public boolean removeColumn(UsableMethods model) {
         boolean isRemoved = false;
-        try(ResultSet rst = execute.removeColumnQuery(model).getGeneratedKeys()) {
+        try(Statement stm = execute.removeColumnQuery(model); ResultSet rst = stm.getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
@@ -125,7 +126,7 @@ public class MigrationDAO {
 
     public boolean modifyType(UsableMethods model) {
         boolean isRemoved = false;
-        try(ResultSet rst = execute.modifyTypeQuery(model).getGeneratedKeys()) {
+        try(Statement stm = execute.modifyTypeQuery(model); ResultSet rst = stm.getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
@@ -139,7 +140,7 @@ public class MigrationDAO {
     }
     public boolean addCheckConstraint(ParamValue params) {
         boolean isRemoved = false;
-        try(ResultSet rst = execute.addCheckConstraintQuery(params).getGeneratedKeys()) {
+        try(Statement stm = execute.addCheckConstraintQuery(params); ResultSet rst = stm.getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
@@ -153,7 +154,7 @@ public class MigrationDAO {
     }
     public boolean addDefaultConstraint(ParamValue params) {
         boolean isRemoved = false;
-        try(ResultSet rst = execute.addDefaultConstraintQuery(params).getGeneratedKeys()) {
+        try(Statement stm = execute.addDefaultConstraintQuery(params); ResultSet rst = stm.getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
@@ -167,7 +168,7 @@ public class MigrationDAO {
     }
     public boolean removeCheckConstraint(String name) {
         boolean isRemoved = false;
-        try(ResultSet rst = execute.removeCheckConstraintQuery(name).getGeneratedKeys()) {
+        try(Statement stm = execute.removeCheckConstraintQuery(name); ResultSet rst = stm.getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
@@ -179,10 +180,9 @@ public class MigrationDAO {
         }
         return isRemoved;
     }
-    
     public boolean removeDefaultConstraint(String name) {
         boolean isRemoved = false;
-        try(ResultSet rst = execute.removeDefaultConstraintQuery(name).getGeneratedKeys()) {
+        try(Statement stm = execute.removeDefaultConstraintQuery(name); ResultSet rst = stm.getGeneratedKeys()) {
             if(rst.getMetaData().getColumnCount() > 0) {
                 isRemoved = true;
             } else {
