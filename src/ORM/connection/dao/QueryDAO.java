@@ -3,7 +3,7 @@ package orm.connection.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +11,11 @@ import orm.connection.execution.ExecuteQuery;
 import orm.utils.formats.ParamValue;
 import orm.utils.formats.UsableMethods;
 
+// TODO: verify the changes made to accommodate the try-resource form.
 public class QueryDAO<T> {
+
+    private static final String CONSOLE_FORMAT = "%s%n";
+
     private Connection cursor;
     private String tableName;
     private ExecuteQuery execute;
@@ -27,10 +31,7 @@ public class QueryDAO<T> {
     }
     public List<String> prepareCount(ParamValue condition, String columns) {
         List<String> data = new ArrayList<>();
-        PreparedStatement pstm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.preparedSelectCountQuery(condition, columns, pstm);
+        try(ResultSet rst = execute.preparedSelectCountQuery(condition, columns)) {
             int length = rst.getMetaData().getColumnCount();
             while(rst.next()) {
                 String b = "";
@@ -44,23 +45,6 @@ public class QueryDAO<T> {
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(pstm != null) {
-                try {
-                    pstm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                pstm = null;
-            }
         }
         return data;
     }
@@ -97,10 +81,7 @@ public class QueryDAO<T> {
     }
     public List<String> selectIn(ParamValue condition, String columns) {
         List<String> data = new ArrayList<>();
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.selectInQuery(condition, columns, stm);
+        try(ResultSet rst = execute.selectInQuery(condition, columns)) {
             int length = rst.getMetaData().getColumnCount();
             while(rst.next()) {
                 String b = "";
@@ -114,33 +95,13 @@ public class QueryDAO<T> {
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return data;
     }
 
     public List<String> selectPattern(ParamValue condition, String columns) {
         List<String> data = new ArrayList<>();
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.selectPatternQuery(condition, columns, stm);
+        try(ResultSet rst = execute.selectPatternQuery(condition, columns)) {
             int length = rst.getMetaData().getColumnCount();
             while(rst.next()) {
                 String b = "";
@@ -154,33 +115,13 @@ public class QueryDAO<T> {
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return data;
     }
 
     public List<String> preparedSelectMinMax(ParamValue params, ParamValue condition) {
         List<String> data = new ArrayList<>();
-        PreparedStatement pstm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.preparedSelectMinMaxQuery(params, condition, pstm);
+        try(ResultSet rst = execute.preparedSelectMinMaxQuery(params, condition)) {
             int length = rst.getMetaData().getColumnCount();
             while(rst.next()) {
                 String b = "";
@@ -194,241 +135,101 @@ public class QueryDAO<T> {
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(pstm != null) {
-                try {
-                    pstm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                pstm = null;
-            }
         }
         return data;
     }
 
     public List<T> preparedSelect(ParamValue c) {
         List<T> data = new ArrayList<>();
-        PreparedStatement pstm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.preparedSelectQuery(c, pstm);
+        try(ResultSet rst = execute.preparedSelectQuery(c)) {
             data.addAll(buildObject.build(rst));
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(pstm != null) {
-                try {
-                    pstm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                pstm = null;
-            }
         }
         return data;
     }
     public List<String> preparedFind(ParamValue condition, String columns) {
-        PreparedStatement pstm = null;
-        ResultSet rst = null;
         List<String> data = new ArrayList<>();
-        try {
-            rst = execute.preparedFindQuery(condition, columns, pstm);
+        try(ResultSet rst = execute.preparedFindQuery(condition, columns)) {
             int length = rst.getMetaData().getColumnCount();
             while(rst.next()) {
-                String b = "";
+                StringBuilder b = new StringBuilder();
                 for(int i=1; i<=length; ++i) {
-                    b += rst.getMetaData().getColumnName(i) + ":" + rst.getString(i) + "\n";
+                    b.append(rst.getMetaData().getColumnName(i));
+                    b.append(":");
+                    b.append(rst.getString(i));
+                    b.append("\n");
                 }
-                if(b.length()-1 > 0) {
-                    b = b.substring(0, b.length()-1);
-                }
-                data.add(b);
+                data.add(b.toString());
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(pstm != null) {
-                try {
-                    pstm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                pstm = null;
-            }
         }
         return data;
     }
     public boolean preparedInsert(UsableMethods m) {
         boolean isAdded = false;
-        PreparedStatement pstm = null;
-        int rst = 0;
-        try {
-            rst = execute.preparedInsertQuery(m, pstm);
-            if(rst > 0) {
-                isAdded = true;
-            } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute preparedInsertQuery"
-                );
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            if(pstm != null) {
-                try {
-                    pstm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                pstm = null;
-            }
+        int rst = execute.preparedInsertQuery(m);
+        if(rst > 0) {
+            isAdded = true;
+        } else {
+            System.console().printf(CONSOLE_FORMAT,
+                    "[Error] something happen while trying to execute preparedInsertQuery");
         }
         return isAdded;
     }
     public boolean insert(UsableMethods m) {
         boolean isAdded = false;
-        Statement stm = null;
-        int rst = 0;
-        try {
-            rst = execute.insertQuery(m, stm);
-            if(rst > 0) {
-                isAdded = true;
-            } else {
-                System.err.println(
-                    "[ INFO ]: something happen while trying to execute insertQuery"
-                );
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
+        int rst = execute.insertQuery(m);
+        if(rst > 0) {
+            isAdded = true;
+        } else {
+            System.console().printf(CONSOLE_FORMAT,
+                "[Error] something happen while trying to execute insertQuery"
+            );
         }
         return isAdded;
     }
     public List<String> innerJoin(UsableMethods m, UsableMethods[] foreignModel, String[] foreignTables,
             ParamValue[] conditions) {
         List<String> data = new ArrayList<>();
-        Statement stm = null;
-        ResultSet rst = null;
-        try {
-            rst = execute.innerJoinQuery(m, foreignModel, foreignTables, conditions, stm);
+        try(ResultSet rst = execute.innerJoinQuery(m, foreignModel, foreignTables, conditions)) {
             int length = rst.getMetaData().getColumnCount();
             while(rst.next()) {
-                String b = "";
+                StringBuilder b = new StringBuilder();
                 for(int i=1; i<=length; ++i) {
                     String column = rst.getMetaData().getColumnName(i);
-                    b += column + ":" + rst.getString(i) + "\n";
+                    b.append(column);
+                    b.append(":");
+                    b.append(rst.getString(i));
+                    b.append("\n");
                 }
-                if(b.length()-1 > 0) {
-                    b = b.substring(0, b.length()-1);
-                }
-                data.add(b);
+                data.add(b.toString());
             }
         } catch(Exception e) {
             e.printStackTrace();
-        } finally {
-            if(rst != null) {
-                try {
-                    rst.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                rst = null;
-            }
-            if(stm != null) {
-                try {
-                    stm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                stm = null;
-            }
         }
         return data;
     }
     public boolean preparedUpdate(UsableMethods m, ParamValue condition) {
         boolean isUpdated = false;
-        PreparedStatement pstm = null;
-        int rst = 0;
-        try {
-            rst = execute.preparedUpdateQuery(m, condition, pstm);
-            if(rst > 0) {
-                isUpdated = true;
-            } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute preparedUpdate"
-                );
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            if(pstm != null) {
-                try {
-                    pstm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                pstm = null;
-            }
+        int rst = execute.preparedUpdateQuery(m, condition);
+        if(rst > 0) {
+            isUpdated = true;
+        } else {
+            System.console().printf(CONSOLE_FORMAT,
+                    "[Error] something happen while trying to execute preparedUpdate");
         }
         return isUpdated;
     }
     public boolean preparedDelete(ParamValue condition) {
         boolean isDeleted = false;
-        PreparedStatement pstm = null;
-        int rst = 0;
-        try {
-            rst = execute.preparedDeleteQuery(condition, pstm);
-            if(rst > 0) {
-                isDeleted = true;
-            } else {
-                System.err.println(
-                        "[ INFO ]: something happen while trying to execute preparedDelete"
-                );
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            if(pstm != null) {
-                try {
-                    pstm.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                pstm = null;
-            }
+        int rst = execute.preparedDeleteQuery(condition);
+        if(rst > 0) {
+            isDeleted = true;
+        } else {
+            System.console().printf(CONSOLE_FORMAT,
+                    "[Error] something happen while trying to execute preparedDelete");
         }
         return isDeleted;
     }

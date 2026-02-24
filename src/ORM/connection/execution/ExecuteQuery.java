@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import orm.builders.querys.QueryBuilder;
@@ -32,92 +33,124 @@ public class ExecuteQuery {
             pstm.setString((i+1), values[i]);
         }
     }
-    public ResultSet preparedSelectCountQuery(ParamValue condition, String columns, PreparedStatement pstm)
-        throws SQLException {
-        
+    public ResultSet preparedSelectCountQuery(ParamValue condition, String columns) {
         String sql = builder.getPreparedCount(condition, columns);
-        pstm = cursor.prepareStatement(sql);
-        setPrepareStatementData(condition.getValues(), pstm);
-        return pstm.executeQuery();
+        try (PreparedStatement pstm = cursor.prepareStatement(sql)) {
+            setPrepareStatementData(condition.getValues(), pstm);
+            return pstm.executeQuery();
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public ResultSet preparedSelectQuery(ParamValue c, PreparedStatement pstm) throws SQLException {
+    public ResultSet preparedSelectQuery(ParamValue c){
         String sql = builder.getPreparedSelectQuery(c);
-        pstm = cursor.prepareStatement(sql);
-        setPrepareStatementData(c.getValues(), pstm);
-        return pstm.executeQuery();
+        try(PreparedStatement pstm = cursor.prepareStatement(sql)) {
+            setPrepareStatementData(c.getValues(), pstm);
+            return pstm.executeQuery();
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public ResultSet selectInQuery(ParamValue condition, String columns, Statement stm) throws SQLException {
+    public ResultSet selectInQuery(ParamValue condition, String columns){
         String sql = builder.getSelectInQuery(condition, columns);
-        stm = cursor.createStatement();
-        return stm.executeQuery(sql);
+        try(Statement stm = cursor.createStatement()) {
+            return stm.executeQuery(sql);
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public ResultSet preparedFindQuery(ParamValue c, String columns, PreparedStatement pstm)
-            throws SQLException {
+    public ResultSet preparedFindQuery(ParamValue c, String columns) {
         String sql = builder.getPreparedFindQuery(c, columns);
-        pstm = cursor.prepareStatement(sql);
-        setPrepareStatementData(c.getValues(), pstm);
-        return pstm.executeQuery();
+        try(PreparedStatement pstm = cursor.prepareStatement(sql)) {
+            setPrepareStatementData(c.getValues(), pstm);
+            return pstm.executeQuery();
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public ResultSet selectPatternQuery(ParamValue condition, String columns, Statement stm) 
-        throws SQLException {
+    public ResultSet selectPatternQuery(ParamValue condition, String columns) {
         String sql = builder.getSelectPattern(condition, columns);
-        stm = cursor.createStatement();
-        return stm.executeQuery(sql);
+        try(Statement stm = cursor.createStatement()) {
+            return stm.executeQuery(sql);
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public ResultSet preparedSelectMinMaxQuery(ParamValue params, ParamValue condition, PreparedStatement pstm)
-            throws SQLException {
+    public ResultSet preparedSelectMinMaxQuery(ParamValue params, ParamValue condition) {
         String sql = builder.getPreparedSelectMinMax(params, condition);
-        pstm = cursor.prepareStatement(sql);
-        setPrepareStatementData(condition.getValues(), pstm);
-        return pstm.executeQuery();
+        try(PreparedStatement pstm = cursor.prepareStatement(sql)) {
+            setPrepareStatementData(condition.getValues(), pstm);
+            return pstm.executeQuery();
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public int preparedInsertQuery(UsableMethods m, PreparedStatement pstm) throws SQLException {
-        String
-            modelValues = modelUtils.getTypes(m.getInstanceData(), true),
-            sql = builder.getPreparedInsertQuery(m);
-        pstm = cursor.prepareStatement(sql);
-        setPrepareStatementData(modelValues.split(","), pstm);
-        return pstm.executeUpdate();
+    public int preparedInsertQuery(UsableMethods m){
+        String modelValues = modelUtils.getTypes(m.getInstanceData(), true);
+        String sql = builder.getPreparedInsertQuery(m);
+        try(PreparedStatement pstm = cursor.prepareStatement(sql)) {
+            setPrepareStatementData(modelValues.split(","), pstm);
+            return pstm.executeUpdate();
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
-    public int insertQuery(UsableMethods m, Statement stm) throws SQLException {
+    public int insertQuery(UsableMethods m){
         String sql = builder.getInsertQuery(m);
-        stm = cursor.createStatement();
-        return stm.executeUpdate(sql);
+        try(Statement stm = cursor.createStatement()) {
+            return stm.executeUpdate(sql);
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return -1;
+        } 
     }
-    public ResultSet innerJoinQuery(UsableMethods p, UsableMethods[] f, String[] ftb, ParamValue[] conditions, 
-            Statement stm) throws SQLException {
+    public ResultSet innerJoinQuery(UsableMethods p, UsableMethods[] f, String[] ftb, ParamValue[] conditions) {
         String sql = builder.getInnerJoinQuery(p, f, ftb, conditions);
-        stm = cursor.createStatement();
-        return stm.executeQuery(sql);
+        try(Statement stm = cursor.createStatement()) {
+            return stm.executeQuery(sql);
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    public int preparedUpdateQuery(UsableMethods m, ParamValue c, PreparedStatement pstm)
-        throws SQLException {
-        String 
-            types = modelUtils.getTypes(m.getInstanceData(), true),
-            sql = builder.getPreparedUpdateQuery(m, c);
-        pstm = cursor.prepareStatement(sql);
-        String[] 
-            setValues = types.split(","),
-            conditionValues   = c.getValues();
-        // set the condition values
-        List<String> val = new ArrayList<>();
-        for(String s: setValues) {
-            val.add(s.replace("'", ""));
+    public int preparedUpdateQuery(UsableMethods m, ParamValue c) {
+        String types = modelUtils.getTypes(m.getInstanceData(), true);
+        String sql = builder.getPreparedUpdateQuery(m, c);
+        try(PreparedStatement pstm = cursor.prepareStatement(sql)) {
+            String[] setValues = types.split(",");
+            String[] conditionValues = c.getValues();
+            // set the condition values
+            List<String> val = new ArrayList<>();
+            for(String s: setValues) {
+                val.add(s.replace("'", ""));
+            }
+            val.addAll(Arrays.asList(conditionValues));
+            // set the update values
+            for(int i=0; i<val.size(); ++i) {
+                pstm.setString((i+1), val.get(i));
+            }
+            return pstm.executeUpdate();
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return -1;
         }
-        for(String s: conditionValues) {
-            val.add(s);
-        }
-        // set the update values
-        for(int i=0; i<val.size(); ++i) {
-            pstm.setString((i+1), val.get(i));
-        }
-        return pstm.executeUpdate();
     }
 
-    public int preparedDeleteQuery(ParamValue c, PreparedStatement pstm) throws SQLException {
+    public int preparedDeleteQuery(ParamValue c) {
         String sql = builder.getPreparedDeleteQuery(c);
-        pstm = cursor.prepareCall(sql);
-        setPrepareStatementData(c.getValues(), pstm);
-        return pstm.executeUpdate();
+        try(PreparedStatement pstm = cursor.prepareCall(sql)) {
+            setPrepareStatementData(c.getValues(), pstm);
+            return pstm.executeUpdate();
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 }
