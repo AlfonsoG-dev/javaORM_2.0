@@ -11,7 +11,6 @@ import orm.connection.execution.ExecuteQuery;
 import orm.utils.formats.ParamValue;
 import orm.utils.formats.UsableMethods;
 
-// TODO: verify the changes made to accommodate the try-resource form.
 public class QueryDAO<T> {
 
     private static final String CONSOLE_FORMAT = "%s%n";
@@ -141,7 +140,7 @@ public class QueryDAO<T> {
 
     public List<T> preparedSelect(ParamValue c) {
         List<T> data = new ArrayList<>();
-        try(ResultSet rst = execute.preparedSelectQuery(c)) {
+        try(PreparedStatement pstm = execute.preparedSelectQuery(c); ResultSet rst = pstm.executeQuery()) {
             data.addAll(buildObject.build(rst));
         } catch(Exception e) {
             e.printStackTrace();

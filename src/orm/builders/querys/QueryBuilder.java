@@ -4,7 +4,6 @@ import orm.utils.formats.ParamValue;
 import orm.utils.formats.UsableMethods;
 import orm.utils.query.QueryUtils;
 
-// TODO: verify the changes of the string to StringBuilder
 public class QueryBuilder {
 
     private static final String SELECT = "SELECT ";

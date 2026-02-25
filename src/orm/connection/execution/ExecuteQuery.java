@@ -15,7 +15,6 @@ import orm.utils.formats.ParamValue;
 import orm.utils.formats.UsableMethods;
 import orm.utils.model.ModelUtils;
 
-// TODO: verify the try-resource changes
 public class ExecuteQuery {
     private Connection cursor;
     private QueryBuilder builder;
@@ -44,15 +43,11 @@ public class ExecuteQuery {
             return null;
         }
     }
-    public ResultSet preparedSelectQuery(ParamValue c){
+    public PreparedStatement preparedSelectQuery(ParamValue c) throws SQLException {
         String sql = builder.getPreparedSelectQuery(c);
-        try(PreparedStatement pstm = cursor.prepareStatement(sql)) {
-            setPrepareStatementData(c.getValues(), pstm);
-            return pstm.executeQuery();
-        } catch(SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        PreparedStatement pstm = cursor.prepareStatement(sql);
+        setPrepareStatementData(c.getValues(), pstm);
+        return pstm;
     }
     public ResultSet selectInQuery(ParamValue condition, String columns){
         String sql = builder.getSelectInQuery(condition, columns);

@@ -1,10 +1,10 @@
 package orm.utils.model;
 
 import java.util.List;
-
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
-// TODO: complete the sonarqube warnings
+
 public class ModelUtils {
     private String clean(String c, int spaces) {
         String b = "";
@@ -12,6 +12,19 @@ public class ModelUtils {
             b = c.substring(0, c.length()-spaces);
         }
         return b;
+    }
+    private void appendColumnType(StringBuilder ts, String[] data) {
+        for(int i=0; i<data.length; ++i) {
+            String[] spaces = data[i].split(":", 2);
+            if(spaces.length > 1) {
+                String type = spaces[1].trim();
+                if(!type.isEmpty()) {
+                    ts.append("'");
+                    ts.append(type);
+                    ts.append("',");
+                }
+            }
+        }
     }
     public String getTypes(String model, boolean includeKeys) {
         String[] data = model.split("\n");
@@ -26,47 +39,39 @@ public class ModelUtils {
                 }
             }
         } else {
-            for(int i=0; i<data.length; ++i) {
-                String[] spaces = data[i].split(":", 2);
-                if(spaces.length > 1) {
-                    String type = spaces[1].trim();
-                    if(!type.isEmpty()) {
-                        ts.append("'");
-                        ts.append(type);
-                        ts.append("',");
-                    }
-                }
-            }
+            appendColumnType(ts, data);
         }
         return clean(ts.toString(), 1);
     }
     public String getColumns(String model, boolean includeKeys) {
         String[] data = model.split("\n");
-        String colName = "";
-        String modelCol = "";
+        StringBuilder colName = new StringBuilder();
+        StringBuilder modelCol = new StringBuilder();
         for(int i=0; i<data.length; ++i) {
             String column = data[i].split(":", 2)[0].trim();
             if(!column.isEmpty()) {
-                colName += column + ",";
+                colName.append(column);
+                colName.append(",");
             }
         }
-        String[] cols = colName.split(",");
+        String[] cols = colName.toString().split(",");
         if(!includeKeys) {
             for(int i=1; i<cols.length; ++i) {
-                modelCol += cols[i] + ",";
+                modelCol.append(cols[i]);
+                modelCol.append(",");
             }
         } else {
             for(int i=0; i<cols.length; ++i) {
-                modelCol += cols[i] + ",";
+                modelCol.append(cols[i]);
+                modelCol.append(",");
             }
         }
-        return clean(modelCol, 1);
+        return clean(modelCol.toString(), 1);
     }
-    public HashMap<String, List<String>> getKeys(String model) {
-        HashMap<String, List<String>> keys = new HashMap<>();
-        List<String>
-            pks = new ArrayList<>(),
-            fks = new ArrayList<>();
+    public Map<String, List<String>> getKeys(String model) {
+        Map<String, List<String>> keys = new HashMap<>();
+        List<String> pks = new ArrayList<>();
+        List<String> fks = new ArrayList<>();
         String[] columns = getColumns(model, true).split(",");
         for(String c: columns) {
             if(c.contains("pk")) {
@@ -76,10 +81,10 @@ public class ModelUtils {
                 fks.add(c);
             }
         }
-        if(pks.size() > 0) {
+        if(!pks.isEmpty()) {
             keys.put("pk", pks);
         }
-        if(fks.size() > 0) {
+        if(!fks.isEmpty()) {
             keys.put("fk", fks);
         }
         return keys;

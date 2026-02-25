@@ -10,7 +10,6 @@ import orm.utils.model.ModelUtils;
 import orm.utils.query.MigrationUtils;
 import orm.utils.query.QueryUtils;
 
-// TODO: verify the StringBuilder changes that are attach to the b variable in all the code.
 public class MigrationBuilder {
     private static final String ADD_CONSTRAINT = "ADD CONSTRAINT ";
 
