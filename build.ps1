@@ -2,6 +2,5 @@ $srcClasses = "src\orm\builders\migration\*.java src\orm\builders\querys\*.java 
 $libFiles = ".\lib\mysql-connector-j-9.3.0\mysql-connector-j-9.3.0.jar;"
 $compile = "javac --release 23 -Xlint:all -Xdiags:verbose -d .\bin\ -cp '$libFiles' $srcClasses"
 $createJar = "jar -cfm javaORM_2.0.jar Manifesto.txt -C .\bin\ . -C .\extractionFiles\mysql-connector-j-9.3.0\ ."
-$javaCommand = "java -jar javaORM_2.0.jar"
-$runCommand = "$compile" + " && " + "$createJar" + " && " +"$javaCommand"
+$runCommand = "$compile" + " && " + "$createJar"
 Invoke-Expression $runCommand 
